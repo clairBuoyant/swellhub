@@ -1,0 +1,12 @@
+.DS_Store
+.docker
+.git
+.gitignore
+.vscode
+.yarn
+
+docs
+node_modules
+
+LICENSE
+*.md
