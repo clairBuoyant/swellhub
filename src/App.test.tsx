@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
 
-import App from './App';
+import App from './app';
 
 test("renders 'clairBuoyant' in header", () => {
   render(<App />);

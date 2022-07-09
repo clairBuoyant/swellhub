@@ -1,13 +1,10 @@
-FROM node:16
-
-ADD package.json /package.json
-
-ENV NODE_PATH=/node_modules
-ENV PATH=$PATH:/node_modules/.bin
-RUN npm i
+FROM node:18.5-bullseye
 
 WORKDIR /app
 ADD . /app
+
+ENV NODE_PATH=/web/node_modules
+ENV PATH=$PATH:/web/node_modules/.bin
 
 EXPOSE 8000
 EXPOSE 35729
