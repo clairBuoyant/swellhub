@@ -2314,6 +2314,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-leaflet/core@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@react-leaflet/core@npm:2.0.0"
+  peerDependencies:
+    leaflet: ^1.8.0
+    react: ^18.0.0
+    react-dom: ^18.0.0
+  checksum: 8528b05bb3f2218dc783d508fad571ed34986bb9a15e8296f3ca6e090934ee4b9858172cab25bc2ae3255c880660d648477bb609c496bee70d1c0e3fb99f0533
+  languageName: node
+  linkType: hard
+
 "@rollup/plugin-babel@npm:^5.2.0":
   version: 5.3.1
   resolution: "@rollup/plugin-babel@npm:5.3.1"
@@ -2777,6 +2788,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/geojson@npm:*":
+  version: 7946.0.9
+  resolution: "@types/geojson@npm:7946.0.9"
+  checksum: b858f06a27f4c11dbf441a7ea710a27563ebdd5a0326daee5869b0483a39642a19f39b0f415518e981278f911470f9275b99d86b9ede5d7b19a64c32a14cd36e
+  languageName: node
+  linkType: hard
+
 "@types/graceful-fs@npm:^4.1.2":
   version: 4.1.5
   resolution: "@types/graceful-fs@npm:4.1.5"
@@ -2858,6 +2876,15 @@ __metadata:
   version: 0.0.29
   resolution: "@types/json5@npm:0.0.29"
   checksum: e60b153664572116dfea673c5bda7778dbff150498f44f998e34b5886d8afc47f16799280e4b6e241c0472aef1bc36add771c569c68fc5125fc2ae519a3eb9ac
+  languageName: node
+  linkType: hard
+
+"@types/leaflet@npm:^1.7.11":
+  version: 1.7.11
+  resolution: "@types/leaflet@npm:1.7.11"
+  dependencies:
+    "@types/geojson": "*"
+  checksum: 6613dbc91f174545ed39183a8564a344152f1884f02ab4dbc002b6bd4816d8525b5247e62217694763daf727ca5e589f40144dc809edb7194064e6bdc2f4369a
   languageName: node
   linkType: hard
 
@@ -4404,11 +4431,14 @@ __metadata:
     "@testing-library/react": ^13.3.0
     "@testing-library/user-event": ^14.2.1
     "@types/jest": ^28.1.4
+    "@types/leaflet": ^1.7.11
     "@types/node": ^18.0.3
     "@types/react": ^18.0.15
     "@types/react-dom": ^18.0.6
+    leaflet: ^1.8.0
     react: ^18.2.0
     react-dom: ^18.2.0
+    react-leaflet: ^4.0.1
     react-scripts: 5.0.1
     typescript: ^4.7.4
     web-vitals: ^2.1.4
@@ -8226,6 +8256,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"leaflet@npm:^1.8.0":
+  version: 1.8.0
+  resolution: "leaflet@npm:1.8.0"
+  checksum: 4a27895d4253844f2f13f94cbc52a2030b10833cdf553085d931b834745236a8d2a38844a01eb968cc109eb43268bfadb97aad85b51deffb17b6ccd106542e00
+  languageName: node
+  linkType: hard
+
 "leven@npm:^3.1.0":
   version: 3.1.0
   resolution: "leven@npm:3.1.0"
@@ -10450,6 +10487,19 @@ __metadata:
   version: 18.1.0
   resolution: "react-is@npm:18.1.0"
   checksum: d206a0fe6790851bff168727bfb896de02c5591695afb0c441163e8630136a3e13ee1a7ddd59fdccddcc93968b4721ae112c10f790b194b03b35a3dc13a355ef
+  languageName: node
+  linkType: hard
+
+"react-leaflet@npm:^4.0.1":
+  version: 4.0.1
+  resolution: "react-leaflet@npm:4.0.1"
+  dependencies:
+    "@react-leaflet/core": ^2.0.0
+  peerDependencies:
+    leaflet: ^1.8.0
+    react: ^18.0.0
+    react-dom: ^18.0.0
+  checksum: f5e94c0e3b49f8d7d3c464185f8624ab0ad6958a950dd153974183ed93be1b61216c1cddd09967a85e65762f6696a39dfac086ab770980689405e80b3c43a6c1
   languageName: node
   linkType: hard
 
