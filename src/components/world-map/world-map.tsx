@@ -5,18 +5,25 @@ import { API_ROUTES } from 'src/constants';
 import { Buoy, ParsedBuoy } from 'src/types';
 import './world-map.css';
 
+const WORLD_MAP_DEFAULT_VIEW: [number, number] = [40.586723, -73.811501];
+
 export const WorldMap = () => {
   const [buoys, setBuoys] = useState<ParsedBuoy[]>([]);
 
   const parseBuoyData = (data: Buoy[]) => {
     const parsedBuoyObjArr = [];
     for (const buoy of data) {
-      const { station_id, name, location } = buoy;
-      const newBuoyObj = {
-        latitude: location[1],
-        longitude: location[0],
+      const {
+        station_id: stationId,
         name,
-        stationId: station_id,
+        location: [longitude, latitude],
+      } = buoy;
+
+      const newBuoyObj = {
+        latitude,
+        longitude,
+        name,
+        stationId,
       };
       parsedBuoyObjArr.push(newBuoyObj);
     }
@@ -40,11 +47,13 @@ export const WorldMap = () => {
   return (
     <MapContainer
       id="map"
-      center={[40.586723, -73.811501]}
-      zoom={10}
-      zoomControl={false}
-      scrollWheelZoom={false}
       attributionControl={false}
+      center={WORLD_MAP_DEFAULT_VIEW}
+      minZoom={2}
+      scrollWheelZoom={false}
+      worldCopyJump={true}
+      zoomControl={false}
+      zoom={10}
     >
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" maxZoom={13} />
       <ZoomControl position="bottomright" />
