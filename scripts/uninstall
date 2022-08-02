@@ -1,0 +1,9 @@
+#!/bin/sh -ex
+
+# npm -g unlink
+
+./scripts/clean
+
+if [ -d 'node_modules' ] ; then
+    rm -r node_modules
+fi

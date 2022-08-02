@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, CircleMarker, ZoomControl } from 'react-leaflet';
 
-import { API_ROUTES } from 'src/constants';
-import { Buoy, ParsedBuoy } from 'src/types';
+import { API_ROUTES } from 'common/constants';
+import { Buoy, ParsedBuoy } from 'common/types';
+
 import './world-map.css';
 
 const WORLD_MAP_DEFAULT_VIEW: [number, number] = [40.586723, -73.811501];

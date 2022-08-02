@@ -1,4 +1,5 @@
 import { BrowserRouter, NavLink } from 'react-router-dom';
+
 import { NAVBAR_PATH } from './navbar.constants';
 import './navbar.css';
 

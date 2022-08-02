@@ -1,9 +1,11 @@
-.yarn
+# directories
 build
 dist
 node_modules
+public
+scripts
+
+# files
 package.json
 package-lock.json
-public
 tsconfig.json
-yarn.lock
