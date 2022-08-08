@@ -1,6 +1,7 @@
-#!/bin/sh -ex
+#!/bin/bash -e
+#
+# Install node dependencies and githooks.
 
-command -v pre-commit &> /dev/null && pre-commit install --hook-type commit-msg || echo >&2 "pre-commit not found."
+command -v pre-commit &> /dev/null && pre-commit install --hook-type commit-msg || echo >&2 'pre-commit not found.'
 
 npm ci
-# npm link

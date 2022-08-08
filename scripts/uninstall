@@ -1,8 +1,11 @@
-#!/bin/sh -ex
+#!/bin/bash -ex
+#
+# Remove node dependencies and build artifacts.
 
-# npm -g unlink
+CURRENT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+BASE_DIR="$(dirname "$CURRENT_DIR")"
 
-./scripts/clean
+${BASE_DIR}/scripts/clean
 
 if [ -d 'node_modules' ] ; then
     rm -r node_modules

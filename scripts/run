@@ -1,4 +1,6 @@
-#!/bin/sh -e
+#!/bin/bash -e
+#
+# Docker entrypoint.
 
 case $1 in
     start)

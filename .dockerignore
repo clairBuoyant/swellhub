@@ -10,4 +10,5 @@ docs
 node_modules
 
 LICENSE
+aliases
 *.md

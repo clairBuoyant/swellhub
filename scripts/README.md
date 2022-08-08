@@ -2,21 +2,27 @@
 
 These scripts are provided for development of [clairBuoyant](https://www.github.com/clairBuoyant). The script names are standardized across all repositories for clairBuoyant to simplify the development experience.
 
-### Commands
+### Available Commands
 
-- `bootstrap` - Prepare local development environment.
-- `clean` - Delete any build artifacts.
-- `init` - Execute bootstrap and setup for initial setup.
-- `setup` - Initial setup for development dependencies.
-- `start` - Start server locally.
-- `uninstall` - Delete all dependencies and build artifacts.
+- `bootstrap`: resolve all system dependencies the application needs to run.
+- `clean`: remove all unnecessary build artifacts.
+- `init`: run bootstrap and setup.
+- `setup`: install node dependencies and githooks.
+- `start`: start app locally.
+- `uninstall`: remove node dependencies and build artifacts.
 
 ### Usage
 
-The two recommended ways to interact with these scripts are directly or with poetry in your terminal.
+These scripts can be used directly or with `npm` (**recommended**).
 
-1. Run script directly: `./scripts/<name>` (e.g., `./scripts/init`)
-2. Run with npm: `npm run <name>` (e.g., `npm run init`)
+1. Run with npm: `npm run <command_name>` (e.g., `npm run init`).
+2. Run script directly:
+  - `./scripts/<command_name>` (e.g., `./scripts/init`).
+  - Run `. ./aliases` in your terminal in order to run any script just by `<command_name>` (e.g., `init` or `start`). <sup>1</sup>
+
+#### Note
+
+1. This script needs to be re-run every time you start a new terminal session. But, it saves you from prepending `npm run` every time! :)
 
 ### Attribution
 

@@ -1,49 +1,32 @@
-#!/bin/sh -e
+#!/bin/bash -e
 #
 # Resolve all system dependencies the application needs to run.
-
-echo "ABOUT BOOTSTRAP
-Ensures your NodeJS and Python versions are compatible.
-
-Installs the following required dependencies:
-    - pipx (https://pypa.github.io/pipx/)
-    - pre-commit with pipx (https://pre-commit.com/)
-"
-
-read -p "Would you like to proceed? (y/n) " -n 1 -r
-echo # move to a new line
-if [[ ! $REPLY =~ ^[Yy]$ ]]
-then
-    [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1
-fi
-
 
 PYV=`python3 -c 'import sys; sys.stdout.write("true") if sys.version_info.major >= 3 and sys.version_info.minor >= 10 else sys.stdout.write("false");'`
 if ! $PYV
 then
-    echo "Python version 3.10 or greater is required."
+    echo 'Python version 3.10 or greater is required.'
     exit 1
 fi
 
 JSV=`node -e 'const [major, minor] = process.version.slice(1).split(".").map(n => Number(n)); major >= 18 && minor >= 7 ? console.log("true") : console.log("false");'`
 if ! $JSV
 then
-    echo "Node version 18.7 or greater is required."
+    echo 'Node version 18.7 or greater is required.'
     exit 1
 fi
 
-
-echo "[REQUIRED] Checking for pipx..."
-if ! command -v pipx &> /dev/null
-then
-    echo "pipx was not found. Installing..."
-    python3 -m pip install --user pipx
-    python3 -m pipx ensurepath
-fi
-
-echo "[REQUIRED] Checking for pre-commit..."
+echo 'Checking for pre-commit...'
 if ! command -v pre-commit &> /dev/null
 then
-    echo "pre-commit not found. Installing with pipx..."
+    echo 'pre-commit not found. Installing with pipx...'
+    if ! command -v pipx &> /dev/null
+    then
+        echo 'pipx was not found. Installing pipx first...'
+        python3 -m pip install --user pipx
+        python3 -m pipx ensurepath
+    fi
     pipx install pre-commit
 fi
+
+echo 'System dependencies installed.'

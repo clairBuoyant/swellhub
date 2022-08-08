@@ -22,7 +22,7 @@ repos:
         files: \.[jt]sx?$
         types: [file]
   - repo: https://github.com/clairBuoyant/pre-commit
-    rev: v0.1.2
+    rev: v0.2.0
     hooks:
       - id: branch-validate
   - repo: https://github.com/commitizen-tools/commitizen
