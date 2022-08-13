@@ -5,7 +5,8 @@ node_modules
 public
 scripts
 
-# files
+# configuration
+.eslintrc.json
 package.json
 package-lock.json
 tsconfig.json

@@ -3,18 +3,22 @@
 # Docker entrypoint.
 
 case $1 in
-    start)
-        # The '| cat' is to trick Node that this is an non-TTY terminal
-        # then react-scripts won't clear the console.
-        npm start | cat
-        ;;
     build)
         npm build
+        ;;
+    dev)
+        npm run dev
+        ;;
+    preview)
+        npm run preview
+        ;;
+    start)
+        npm start
         ;;
     test)
         npm test $@
         ;;
     *)
-        npm "$@"
+        npm run "$@"
         ;;
 esac

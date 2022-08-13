@@ -1,7 +1,7 @@
-import { WorldMap } from 'components/world-map';
-import { Navbar } from 'components/navbar';
+import { WorldMap } from '@components/world-map';
+import { Navbar } from '@components/navbar';
 
-const App = () => {
+export default function App() {
   return (
     <div className="app">
       <Navbar />
@@ -9,6 +9,4 @@ const App = () => {
       <WorldMap />
     </div>
   );
-};
-
-export default App;
+}

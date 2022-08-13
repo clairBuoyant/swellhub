@@ -5,3 +5,5 @@
 command -v pre-commit &> /dev/null && pre-commit install --hook-type commit-msg || echo >&2 'pre-commit not found.'
 
 npm ci
+
+# npx update-browserslist-db@latest

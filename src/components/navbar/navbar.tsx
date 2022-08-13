@@ -3,7 +3,7 @@ import { BrowserRouter, NavLink } from 'react-router-dom';
 import { NAVBAR_PATH } from './navbar.constants';
 import './navbar.css';
 
-export const Navbar = () => {
+export function Navbar() {
   return (
     <div className="nav-container">
       <BrowserRouter>
@@ -26,4 +26,4 @@ export const Navbar = () => {
       </BrowserRouter>
     </div>
   );
-};
+}

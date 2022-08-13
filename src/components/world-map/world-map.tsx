@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, CircleMarker, ZoomControl } from 'react-leaflet';
 
-import { API_ROUTES } from 'common/constants';
-import { Buoy, ParsedBuoy } from 'common/types';
+import { API_ROUTES } from '@constants';
+import { Buoy, ParsedBuoy } from '@types';
 
 import './world-map.css';
 
 const WORLD_MAP_DEFAULT_VIEW: [number, number] = [40.586723, -73.811501];
 
-export const WorldMap = () => {
+export function WorldMap() {
   const [buoys, setBuoys] = useState<ParsedBuoy[]>([]);
 
   const parseBuoyData = (data: Buoy[]) => {
-    const parsedBuoyObjArr = [];
-    for (const buoy of data) {
+    const parsedBuoyObjArr: ParsedBuoy[] = [];
+    data.forEach((buoy) => {
       const {
         station_id: stationId,
         name,
@@ -27,23 +27,22 @@ export const WorldMap = () => {
         stationId,
       };
       parsedBuoyObjArr.push(newBuoyObj);
-    }
+    });
     setBuoys(parsedBuoyObjArr);
   };
 
   useEffect(() => {
     (async () => {
       const response = await fetch(API_ROUTES.BUOYS);
-      let buoys = await response.json();
-      parseBuoyData(buoys);
+      const buoyData = await response.json();
+      parseBuoyData(buoyData);
     })();
   }, []);
 
-  const renderCircleMarkers = () => {
-    return buoys.map((buoy) => (
+  const renderCircleMarkers = () =>
+    buoys.map((buoy) => (
       <CircleMarker key={buoy.stationId} center={[buoy.latitude, buoy.longitude]} radius={7} />
     ));
-  };
 
   return (
     <MapContainer
@@ -52,7 +51,7 @@ export const WorldMap = () => {
       center={WORLD_MAP_DEFAULT_VIEW}
       minZoom={2}
       scrollWheelZoom={false}
-      worldCopyJump={true}
+      worldCopyJump
       zoomControl={false}
       zoom={10}
     >
@@ -61,4 +60,4 @@ export const WorldMap = () => {
       {renderCircleMarkers()}
     </MapContainer>
   );
-};
+}
