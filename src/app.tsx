@@ -1,5 +1,5 @@
-import { WorldMap } from '@components/world-map';
 import { Navbar } from '@components/navbar';
+import { WorldMap } from '@components/world-map';
 
 export default function App() {
   return (

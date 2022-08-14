@@ -9,7 +9,7 @@ export default defineConfig({
       '@components': resolve(__dirname, 'src/components'),
       '@constants': resolve(__dirname, 'src/common/constants'),
       '@types': resolve(__dirname, 'src/common/types'),
-      '@views': resolve(__dirname, 'src/components'),
+      '@views': resolve(__dirname, 'src/views'),
     },
   },
   plugins: [react(), process.env.BUILD_MODE ? false : eslintPlugin()],

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, CircleMarker, ZoomControl } from 'react-leaflet';
 
 import { API_ROUTES } from '@constants';
-import { Buoy, ParsedBuoy } from '@types';
+import type { Buoy, ParsedBuoy } from '@types';
 
 import './world-map.css';
 
