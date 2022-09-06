@@ -10,9 +10,13 @@ node_modules
 
 # testing
 coverage
+*.test
 
 # production
 dist
+
+# workspaces
+go.work
 
 ######################
 #  Archives          #
