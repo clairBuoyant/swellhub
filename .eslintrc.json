@@ -75,6 +75,7 @@
       }
     ],
     "react/react-in-jsx-scope": "off",
+    "react/require-default-props": "off",
     "react-hooks/rules-of-hooks": "error",
     "sort-keys-fix/sort-keys-fix": "warn"
   },

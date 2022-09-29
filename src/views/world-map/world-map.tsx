@@ -4,11 +4,9 @@ import { MapContainer, TileLayer, CircleMarker, ZoomControl } from 'react-leafle
 import { API_ROUTES } from '@constants';
 import type { Buoy, ParsedBuoy } from '@types';
 
-import './world-map.css';
-
 const WORLD_MAP_DEFAULT_VIEW: [number, number] = [40.586723, -73.811501];
 
-export function WorldMap() {
+export default function WorldMap() {
   const [buoys, setBuoys] = useState<ParsedBuoy[]>([]);
 
   const parseBuoyData = (data: Buoy[]) => {
@@ -46,6 +44,7 @@ export function WorldMap() {
 
   return (
     <MapContainer
+      style={{ height: '600px', width: '60%' }}
       id="map"
       attributionControl={false}
       center={WORLD_MAP_DEFAULT_VIEW}

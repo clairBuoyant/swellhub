@@ -7,8 +7,10 @@ export default defineConfig({
   resolve: {
     alias: {
       '@components': resolve(__dirname, 'src/components'),
-      '@constants': resolve(__dirname, 'src/common/constants'),
-      '@types': resolve(__dirname, 'src/common/types'),
+      '@constants': resolve(__dirname, 'src/constants'),
+      '@hooks': resolve(__dirname, 'src/hooks'),
+      '@layouts': resolve(__dirname, 'src/layouts'),
+      '@types': resolve(__dirname, 'src/types'),
       '@views': resolve(__dirname, 'src/views'),
     },
   },

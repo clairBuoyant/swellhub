@@ -15,8 +15,10 @@
     "outDir": "dist",
     "paths": {
       "@components/*": ["components/*"],
-      "@constants": ["common/constants/index.ts"],
-      "@types": ["common/types/index.ts"],
+      "@constants": ["constants/index.ts"],
+      "@layouts/*": ["layouts/*"],
+      "@hooks": ["hooks/index.ts"],
+      "@types": ["types/index.ts"],
       "@views/*": ["views/*"]
     },
     "removeComments": true,
