@@ -1,7 +1,7 @@
 import type { ElementType } from 'react';
-import type { RouteObject } from 'react-router-dom';
+import type { NonIndexRouteObject } from 'react-router-dom';
 
-export interface IRoute extends RouteObject {
+export interface IRoute extends NonIndexRouteObject {
   layout?: ElementType;
 }
 

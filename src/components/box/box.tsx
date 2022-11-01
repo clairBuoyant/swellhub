@@ -1,12 +1,12 @@
 import { styled } from '@stitches/react';
 
-import type { IBaseProps } from '@types';
+import type { BaseProps } from '@types';
 
 const StyledResponsiveBox = styled('div', {
   // backgroundColor: '$pink',
 });
 
-function ResponsiveBox({ children }: IBaseProps) {
+function ResponsiveBox({ children }: BaseProps) {
   return <StyledResponsiveBox>{children}</StyledResponsiveBox>;
 }
 
