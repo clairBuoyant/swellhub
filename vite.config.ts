@@ -15,7 +15,11 @@ export default defineConfig({
     },
   },
   plugins: [react(), process.env.BUILD_MODE ? false : eslintPlugin()],
+  preview: {
+    port: 3000,
+  },
   server: {
+    host: '127.0.0.1',
     port: 3000,
   },
 });

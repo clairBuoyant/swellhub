@@ -49,7 +49,7 @@
   },
   "scripts": {
     "bootstrap": "./scripts/bootstrap",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "clean": "./scripts/clean",
     "dev": "vite",
     "init": "./scripts/init",
@@ -85,13 +85,13 @@
         "<rootDir>/src/hooks/index.ts"
       ],
       "@layouts/(.*)": [
-        "<rootDir>/src/layouts/*"
+        "<rootDir>/src/layouts/$1"
       ],
       "@types": [
         "<rootDir>/src/types/index.ts"
       ],
       "@views/(.*)": [
-        "<rootDir>/src/views/*"
+        "<rootDir>/src/views/$1"
       ],
       "\\.(css|less|scss|sass)$": "identity-obj-proxy"
     },
