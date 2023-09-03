@@ -1,13 +1,8 @@
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { keyframes, styled } from '@stitches/react';
+import { keyframes, style } from '@vanilla-extract/css';
 import { forwardRef } from 'react';
 
 import type { DialogRef, Props } from './types';
-
-const scaleIn = keyframes({
-  from: { transform: 'scale(0.9)' },
-  to: { transform: 'scale(1)' },
-});
 
 const fadeIn = keyframes({
   from: { opacity: 0 },
@@ -19,34 +14,27 @@ const fadeout = keyframes({
   to: { opacity: 0 },
 });
 
-const StyledContent = styled(DialogPrimitive.Content, {
-  variants: {
-    animation: {
-      fade: {
-        '&[data-state="closed"]': {
-          animation: `${fadeout} 200ms ease-out`,
-        },
-        '&[data-state="open"]': {
-          animation: `${fadeIn} 300ms ease-out`,
-        },
-      },
-      scale: {
-        animation: `${fadeIn} 300ms ease-out, ${scaleIn} 200ms ease-out`,
-      },
+const styledContent = style({
+  selectors: {
+    '&[data-state="closed"]': {
+      animation: `${fadeout} 200ms ease-out`,
+    },
+    '&[data-state="open"]': {
+      animation: `${fadeIn} 300ms ease-out`,
     },
   },
 });
 
-const StyledCloseButton = styled(DialogPrimitive.Close, {
+const styledCloseButton = style({
   // close button styles
 });
 
 export const DialogContent = forwardRef(
   ({ children, ...props }: Props, forwardedRef: DialogRef) => (
     // eslint-disable-next-line react/jsx-props-no-spreading
-    <StyledContent {...props} ref={forwardedRef}>
+    <DialogPrimitive.Content {...props} className={styledContent} ref={forwardedRef}>
       {children}
-      <StyledCloseButton>O</StyledCloseButton>
-    </StyledContent>
+      <DialogPrimitive.Close className={styledCloseButton}>O</DialogPrimitive.Close>
+    </DialogPrimitive.Content>
   ),
 );

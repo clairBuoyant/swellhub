@@ -1,27 +1,36 @@
+import { NavLink } from 'react-router-dom';
+
 import Container from '@components/container';
 
-import { StyledNav, StyledNavItem, StyledNavItems, StyledNavLink } from './nav';
+import { styledNav, styledNavItem, styledNavItems, styledNavLink } from './nav.css';
 
 export default function Header() {
   return (
-    <StyledNav>
+    <nav className={styledNav}>
       <Container>
-        <StyledNavItems>
-          <StyledNavItem>
-            {/* TODO: align this to left and fix dims */}
-            <StyledNavLink to="/">clairBuoyant</StyledNavLink>
-          </StyledNavItem>
-          <StyledNavItem className="nav-link">
-            <StyledNavLink to="/home">Home</StyledNavLink>
-          </StyledNavItem>
-          <StyledNavItem className="nav-link">
-            <StyledNavLink to="/about">About</StyledNavLink>
-          </StyledNavItem>
-          <StyledNavItem className="nav-link">
-            <StyledNavLink to="/profile">Profile</StyledNavLink>
-          </StyledNavItem>
-        </StyledNavItems>
+        <ul className={styledNavItems}>
+          <li className={styledNavItem}>
+            <NavLink className={styledNavLink} to="/">
+              clairBuoyant
+            </NavLink>
+          </li>
+          <li className={styledNavItem}>
+            <NavLink className={styledNavLink} to="/home">
+              Home
+            </NavLink>
+          </li>
+          <li className={styledNavItem}>
+            <NavLink className={styledNavLink} to="/about">
+              About
+            </NavLink>
+          </li>
+          <li className={styledNavItem}>
+            <NavLink className={styledNavLink} to="/profile">
+              Profile
+            </NavLink>
+          </li>
+        </ul>
       </Container>
-    </StyledNav>
+    </nav>
   );
 }

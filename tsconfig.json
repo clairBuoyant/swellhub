@@ -16,8 +16,9 @@
     "paths": {
       "@components/*": ["components/*"],
       "@constants": ["constants/index.ts"],
-      "@layouts/*": ["layouts/*"],
+      "@features/*": ["features/*"],
       "@hooks": ["hooks/index.ts"],
+      "@layouts/*": ["layouts/*"],
       "@types": ["types/index.ts"],
       "@views/*": ["views/*"]
     },

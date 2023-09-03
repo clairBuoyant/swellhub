@@ -1,19 +1,26 @@
-import { styled } from '@stitches/react';
+import { style } from '@vanilla-extract/css';
 
 import type { Props } from './types';
 
-const StyledButton = styled('button', {
-  '&:hover': {
-    backgroundColor: '$turq',
-    color: '$black',
-  },
-  border: '2px solid $turq',
+// TODO: support dynamic variants or rework with vanilla-extract in mind.
+const styledButton = style({
+  border: '2px solid turquoise',
   borderRadius: '$round',
-  color: '$white',
+  color: 'white',
   fontSize: '$4',
   padding: '$2 $3',
+  selectors: {
+    '&:hover': {
+      backgroundColor: 'turquoise',
+      color: 'black',
+    },
+  },
 });
 
-export function Button({ content }: Props) {
-  return <StyledButton>{content}</StyledButton>;
+export default function Button({ content }: Props) {
+  return (
+    <button type="button" className={styledButton}>
+      {content}
+    </button>
+  );
 }

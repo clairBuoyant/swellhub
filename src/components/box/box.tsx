@@ -1,13 +1,11 @@
-import { styled } from '@stitches/react';
+import { style } from '@vanilla-extract/css';
 
 import type { BaseProps } from '@types';
 
-const StyledResponsiveBox = styled('div', {
-  // backgroundColor: '$pink',
+const styledResponsiveBox = style({
+  // TODO: add responsive styles
 });
 
-function ResponsiveBox({ children }: BaseProps) {
-  return <StyledResponsiveBox>{children}</StyledResponsiveBox>;
+export default function ResponsiveBox({ children }: BaseProps) {
+  return <div className={styledResponsiveBox}>{children}</div>;
 }
-
-export default ResponsiveBox;

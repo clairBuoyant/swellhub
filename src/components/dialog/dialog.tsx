@@ -1,9 +1,9 @@
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { styled } from '@stitches/react';
+import { style } from '@vanilla-extract/css';
 
 import type { Props } from './types';
 
-const StyledOverlay = styled(DialogPrimitive.Overlay, {
+const styledOverlay = style({
   // overlay styles
 });
 
@@ -11,7 +11,7 @@ export function Dialog({ children, ...props }: Props) {
   return (
     // eslint-disable-next-line react/jsx-props-no-spreading
     <DialogPrimitive.Root {...props}>
-      <StyledOverlay />
+      <DialogPrimitive.Overlay className={styledOverlay} />
       {children}
     </DialogPrimitive.Root>
   );
