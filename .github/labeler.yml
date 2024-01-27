@@ -1,0 +1,13 @@
+---
+actions:
+  - .github/**/*
+config:
+  - .editorconfig
+  - .gitignore
+dependencies:
+  - renovate.json
+docs:
+  - *.md
+  - docs/**/*
+test:
+  - tests/**/*

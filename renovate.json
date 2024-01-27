@@ -1,0 +1,22 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "automerge": true,
+  "automergeStrategy": "squash",
+  "automergeType": "pr",
+  "commitMessageAction": "update",
+  "commitMessagePrefix": "fix:",
+  "dependencyDashboard": false,
+  "labels": [
+    "dependencies"
+  ],
+  "platformAutomerge": true,
+  "prConcurrentLimit": 0,
+  "prHourlyLimit": 0,
+  "semanticCommits": "disabled",
+  "vulnerabilityAlerts": {
+    "enabled": true
+  }
+}
