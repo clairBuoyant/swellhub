@@ -3,12 +3,13 @@
 .idea
 .git
 .gitignore
+.github
 .vscode
 .yarn
 
 docs
-node_modules
+**/node_modules
 
 LICENSE
 aliases
-*.md
+**.md
