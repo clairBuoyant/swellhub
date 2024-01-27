@@ -1,0 +1,13 @@
+---
+version: '3'
+
+tasks:
+  build:
+    desc: "Transpile for production."
+    cmds:
+      - npm run build
+
+  deps:
+    desc: "Install all dependencies."
+    cmds:
+      - npm ci
