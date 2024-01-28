@@ -1,0 +1,16 @@
+{
+  "name": "gateway",
+  "description": "Federated GraphQL Gateway",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start:dev": "node index.js"
+  },
+  "dependencies": {
+    "@apollo/gateway": "^2.7.1",
+    "@apollo/server": "^4.10.0",
+    "graphql": "^16.8.1"
+  }
+}
