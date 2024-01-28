@@ -1,9 +1,24 @@
 {
   "eslint.workingDirectories": [
     {
+      "directory": "./gateway",
+      "changeProcessCWD": true
+    },
+    {
       "directory": "./web",
       "changeProcessCWD": true
     },
   ],
-  "typescript.tsdk": "./web/node_modules/typescript/lib"
+  "go.inferGopath": true,
+  "gopls": {
+    "build.buildFlags": ["-tags=tools"],
+  },
+  "material-icon-theme.folders.associations": {
+    "gateway": "Apollo",
+    "web": "React-components"
+  },
+  "typescript.tsdk": "./web/node_modules/typescript/lib",
+  "[go]": {
+    "editor.defaultFormatter": "golang.go"
+  }
 }

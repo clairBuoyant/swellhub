@@ -3,6 +3,6 @@ version: '3'
 
 tasks:
   run:
-    desc: "Compile and run."
+    desc: 'Compile and run.'
     cmds:
       - go run ./cmd/noaa
