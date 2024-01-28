@@ -9,7 +9,13 @@ includes:
       BUILD_TARGET: '{{default "./cmd/api" .BUILD_TARGET}}'
       OUTPUT_FILE: '{{default "api" .OUTPUT_FILE}}'
 
+  gateway:
+    dir: './gateway'
+    taskfile: .taskfiles/gateway.taskfile.yml
+    optional: true
+
   noaa:
+    dir: './pkg/noaa'
     taskfile: .taskfiles/noaa.taskfile.yml
     optional: true
     vars:
@@ -17,6 +23,7 @@ includes:
       OUTPUT_FILE: '{{default "noaa" .OUTPUT_FILE}}'
 
   web:
+    dir: './web'
     taskfile: .taskfiles/web.taskfile.yml
     optional: true
 
