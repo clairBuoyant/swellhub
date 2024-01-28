@@ -1,0 +1,15 @@
+scalar Time
+
+type Feedback @key(fields: "id") {
+  id: ID!
+  message: String!
+  createdAt: Time!
+}
+
+input FeedbackInput {
+  message: String!
+}
+
+type Mutation {
+  createFeedback(input: FeedbackInput!): Feedback!
+}
