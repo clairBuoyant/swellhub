@@ -1,0 +1,13 @@
+---
+version: '3'
+
+tasks:
+  deps:
+    desc: 'Install all dependencies'
+    cmds:
+      - npm ci
+
+  run:dev:
+    desc: 'Run Apollo Gateway'
+    cmds:
+      - npm run start:dev
