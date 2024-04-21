@@ -11,13 +11,11 @@ import (
 	"time"
 )
 
-func request(url string) []byte {
+func request(url string) ([]byte, int) {
 	response, err := http.Get(url)
-
 	if err != nil {
 		log.Fatalln(err)
 	}
-
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
@@ -30,11 +28,15 @@ func request(url string) []byte {
 		log.Fatalln(err)
 	}
 
-	return body
+	// TODO: improve support for error handling and logging
+	return body, response.StatusCode
 }
 
 func realtimeMeteorological(url string) []MeteorologicalObservation {
-	body := request(url)
+	body, statusCode := request(url)
+	if statusCode != 200 {
+		log.Fatal(statusCode)
+	}
 
 	r := csv.NewReader(strings.NewReader(string(body)))
 	r.FieldsPerRecord = 0

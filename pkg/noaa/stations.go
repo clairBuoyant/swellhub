@@ -33,7 +33,7 @@ type Station struct {
 func GetActiveStations() string {
 	url := fmt.Sprintf("%s.%s", ActiveStations, "xml")
 
-	response := request(url)
+	response, _ := request(url)
 
 	var activeStations Stations
 	if err := xml.Unmarshal(response, &activeStations); err != nil {
