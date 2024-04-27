@@ -5,5 +5,8 @@
       "changeProcessCWD": true
     },
   ],
-  "typescript.tsdk": "./web/node_modules/typescript/lib"
+  "typescript.tsdk": "./web/node_modules/typescript/lib",
+  "yaml.schemas": {
+    "https://json.schemastore.org/github-issue-config.json": "${workspaceFolder}/.github/ISSUE_TEMPLATE/config.yml"
+  }
 }
