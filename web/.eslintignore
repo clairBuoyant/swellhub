@@ -1,7 +1,7 @@
 # configs
 tsconfig.json
 tsconfig.*.json
-vite.config.ts
+**/*.config.ts
 
 # dependencies
 node_modules

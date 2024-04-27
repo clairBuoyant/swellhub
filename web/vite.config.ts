@@ -1,3 +1,5 @@
+/// <reference types="vitest" />
+
 import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 import react from '@vitejs/plugin-react-swc';
 import { resolve } from 'path';
@@ -23,5 +25,10 @@ export default defineConfig({
   server: {
     host: '127.0.0.1',
     port: 3000,
+  },
+  test: {
+    globals: true,
+    environment: 'jsdom',
+    setupFiles: ['src/vitest.config.ts'],
   },
 });
