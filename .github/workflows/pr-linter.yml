@@ -20,6 +20,7 @@ jobs:
       pull-requests: read  # for amannn/action-semantic-pull-request to analyze PRs
       statuses: write  # for amannn/action-semantic-pull-request to mark status of analyzed PR
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
       - name: Harden Runner
