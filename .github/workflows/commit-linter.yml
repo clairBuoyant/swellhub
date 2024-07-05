@@ -11,22 +11,25 @@ permissions:  # added using https://github.com/step-security/secure-workflows
 
 jobs:
   lint:
+    if: github.actor != 'renovate[bot]'
     permissions:
       contents: read  # for actions/checkout to fetch code
       pull-requests: read  # for wagoid/commitlint-github-action to get commits in PR
     runs-on: ubuntu-latest
-    if: github.actor != 'renovate[bot]'
+
     steps:
       - name: Harden Runner
-        uses: step-security/harden-runner@128a63446a954579617e875aaab7d2978154e969 # v2.4.0
+        uses: step-security/harden-runner@17d0e2bd7d51742c71671bd19fa12bdc9d40a3d6 # v2.8.1
         with:
           egress-policy: block
           allowed-endpoints: >
             api.github.com:443
             github.com:443
+
       - name: Checkout repository
-        uses: actions/checkout@8e5e7e5ab8b370d6c329ec480221332ada57f0ab # v3.5.2
+        uses: actions/checkout@692973e3d937129bcbf40652eb9f2f61becf3332  # v4.1.7
         with:
           fetch-depth: 0
+
       - name: Lint commits
-        uses: wagoid/commitlint-github-action@456526eec71276a59e74aafdfe06a9632ac2eee1 # v5.4.1
+        uses: wagoid/commitlint-github-action@7f0a61df502599e1f1f50880aaa7ec1e2c0592f2  # v6.0.1

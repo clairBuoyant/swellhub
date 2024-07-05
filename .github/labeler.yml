@@ -7,7 +7,7 @@ config:
 dependencies:
   - renovate.json
 docs:
-  - *.md
+  - '**/*.md'
   - docs/**/*
 test:
   - tests/**/*
