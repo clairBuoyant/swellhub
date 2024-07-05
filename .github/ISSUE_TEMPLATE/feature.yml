@@ -1,3 +1,4 @@
+---
 name: Feature Request
 description: Suggest an idea for this project.
 labels: ["feature"]
@@ -8,6 +9,7 @@ body:
         ## What
           **Is your feature request related to a problem? Please describe.**
               - Clear and concise description of the problem (e.g., I'm always frustrated when [...])
+
   - type: markdown
     attributes:
       value: |
@@ -17,6 +19,7 @@ body:
 
           **Describe alternatives you've considered**
           - Clear and concise description of any alternative solutions or features you've considered.
+
   - type: markdown
     attributes:
       value: |

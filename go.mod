@@ -1,5 +1,3 @@
-module clairBuoyant/swellhub
+module github.com/clairBuoyant/swellhub
 
 go 1.22
-
-require github.com/julienschmidt/httprouter v1.3.0

@@ -5,39 +5,28 @@ import (
 	"os"
 	"runtime/debug"
 	"sync"
+
+	"github.com/clairBuoyant/swellhub/internal/app"
+	"github.com/clairBuoyant/swellhub/internal/http"
+	"github.com/clairBuoyant/swellhub/pkg/env"
 )
 
-type config struct {
-	baseURL  string
-	httpPort int
-}
-
-type application struct {
-	config config
-	logger *slog.Logger
-	wg     sync.WaitGroup
-}
-
 func main() {
-	logger := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}))
+	cfg := &app.Config{
+		Port: env.GetInt("PORT", 4000),
+	}
 
-	err := run(logger)
-	if err != nil {
+	log := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}))
+
+	var wg sync.WaitGroup
+
+	application := app.NewApplication(cfg, log, &wg)
+
+	router := http.NewRouter(application)
+
+	if err := application.ServeHTTP(router); err != nil {
 		trace := string(debug.Stack())
-		logger.Error(err.Error(), "trace", trace)
+		log.Error("could not start http server", "error", err, "trace", trace)
 		os.Exit(1)
 	}
-}
-
-func run(logger *slog.Logger) error {
-	var cfg config
-	cfg.baseURL = "http://localhost" // env.GetInt("BASE_URL", "http://localhost")
-	cfg.httpPort = 4000              // env.GetInt("HTTP_PORT", 4000)
-
-	app := &application{
-		config: cfg,
-		logger: logger,
-	}
-
-	return app.serveHTTP()
 }
