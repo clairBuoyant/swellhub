@@ -1,5 +1,0 @@
-#!/bin/bash -e
-#
-# Start application locally.
-
-npm run dev

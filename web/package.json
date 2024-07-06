@@ -62,17 +62,11 @@
     "vitest": "^2.1.8"
   },
   "scripts": {
-    "bootstrap": "./scripts/bootstrap",
     "build": "vite build",
-    "clean": "./scripts/clean",
     "dev": "vite",
-    "init": "./scripts/init",
     "lint": "eslint src",
     "preview": "vite preview",
-    "setup": "./scripts/setup",
-    "start": "./scripts/start",
-    "test": "vitest",
-    "uninstall": "./scripts/uninstall"
+    "test": "vitest"
   },
   "browserslist": {
     "production": [

@@ -1,9 +1,7 @@
-/// <reference types="vitest" />
-
 import react from '@vitejs/plugin-react-swc';
 import { resolve } from 'path';
-import { defineConfig } from 'vite';
 import eslintPlugin from 'vite-plugin-eslint';
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   resolve: {
