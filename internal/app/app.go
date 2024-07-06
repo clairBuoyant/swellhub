@@ -102,9 +102,13 @@ func (app *Application) ErrorMessage(w http.ResponseWriter, r *http.Request, sta
 	}
 }
 
-func (app *Application) ServerError(w http.ResponseWriter, r *http.Request, err error) {
+func (app *Application) ServerError(w http.ResponseWriter, r *http.Request, err error, code int) {
+	message := err.Error()
+	if code == 0 {
+		code = http.StatusInternalServerError
+		message = "server encountered a problem and could not process your request"
+	}
 	app.ReportServerError(r, err)
 
-	message := "The server encountered a problem and could not process your request"
-	app.ErrorMessage(w, r, http.StatusInternalServerError, message, nil)
+	app.ErrorMessage(w, r, code, message, nil)
 }

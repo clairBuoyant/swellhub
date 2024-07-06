@@ -5,8 +5,8 @@ const (
 	// NDBC Base URL
 	baseUrlNDBC = "https://www.ndbc.noaa.gov"
 
-	ActiveStations = baseUrlNDBC + "/activestations"
-	Realtime       = baseUrlNDBC + "/data/realtime2"
+	ActiveStationsURL = baseUrlNDBC + "/activestations"
+	RealtimeURL       = baseUrlNDBC + "/data/realtime2"
 )
 
 // NOAA Endpoints

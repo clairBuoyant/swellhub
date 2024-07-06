@@ -1,18 +1,17 @@
 package noaa
 
 import (
-	"encoding/json"
 	"encoding/xml"
 	"fmt"
 )
 
 type Stations struct {
-	XMLName  xml.Name  `xml:"stations"`
+	XMLName  xml.Name  `xml:"stations" json:"-"`
 	Stations []Station `xml:"station"`
 }
 
 type Station struct {
-	XMLName      xml.Name `xml:"station"`
+	XMLName      xml.Name `xml:"station" json:"-"`
 	ID           string   `xml:"id,attr"`
 	Lat          float32  `xml:"lat,attr"`
 	Lon          float32  `xml:"lon,attr"`
@@ -24,22 +23,24 @@ type Station struct {
 	WaterQuality string   `xml:"waterquality,attr"`
 }
 
-// func (s Station) String() string {
-// 	return fmt.Sprintf("(Station id=%s, name=%s, lat=%f, lon=%f)",
-// 		s.ID, s.Name, s.Lat, s.Lon,
-// 	)
-// }
+// ActiveStations provides information about all currently active
+// stations marked as established by the NDBC Data Assembly Center.
+//
+// TAO stations are excluded. Each station has an indicator showing
+// whether the elevation, meteorological data, single point or profile
+// currents data, water quality data, or DART data are available.
+func ActiveStations() (*Stations, error) {
+	url := fmt.Sprintf("%s.%s", ActiveStationsURL, "xml")
 
-func GetActiveStations() string {
-	url := fmt.Sprintf("%s.%s", ActiveStations, "xml")
-
-	response, _ := request(url)
+	response, code, err := request(url)
+	if err != nil {
+		return nil, NewRequestError(code, "NDBC request error", err)
+	}
 
 	var activeStations Stations
 	if err := xml.Unmarshal(response, &activeStations); err != nil {
-		panic(err)
+		return nil, NewError(fmt.Sprintf("unmarshall error: %s", err.Error()), err)
 	}
-	activeStationsJson, _ := json.Marshal(activeStations)
 
-	return string(activeStationsJson)
+	return &activeStations, nil
 }
