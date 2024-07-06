@@ -1,7 +1,6 @@
 import { lazy } from 'react';
 
-// eslint-disable-next-line import/no-unresolved
-const AuthRoutes = lazy(() => import('@features/auth/routes')); // TODO: resolve eslint error
+const AuthRoutes = lazy(() => import('@features/auth/routes'));
 
 export const publicRoutes = [
   {

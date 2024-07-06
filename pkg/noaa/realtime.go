@@ -6,6 +6,8 @@ import (
 	"time"
 )
 
+type RealtimeDataset string
+
 // Realtime Datasets
 //
 //	There are nine different data sources:
@@ -19,16 +21,36 @@ import (
 //	  - swr2          Spectral Wave Data (r2)
 //	  - txt           Standard Meteorological Data
 const (
-	DATASPEC = "data_spec"
-	OCEAN    = "ocean"
-	SPEC     = "spec"
-	SUPL     = "supl"
-	SWDIR    = "swdir"
-	SWDIR2   = "swdir2"
-	SWR1     = "swr1"
-	SWR2     = "swr2"
-	TXT      = "txt"
+	DATASPEC RealtimeDataset = "data_spec"
+	OCEAN    RealtimeDataset = "ocean"
+	SPEC     RealtimeDataset = "spec"
+	SUPL     RealtimeDataset = "supl"
+	SWDIR    RealtimeDataset = "swdir"
+	SWDIR2   RealtimeDataset = "swdir2"
+	SWR1     RealtimeDataset = "swr1"
+	SWR2     RealtimeDataset = "swr2"
+	TXT      RealtimeDataset = "txt"
 )
+
+// validDataset contains all valid dataset types.
+//
+// TODO(@kylejb): add support for other data sources
+var validDataset = map[RealtimeDataset]bool{
+	// DATASPEC: true,
+	// OCEAN:    true,
+	// SPEC:     true,
+	// SUPL:     true,
+	// SWDIR:    true,
+	// SWDIR2:   true,
+	// SWR1:     true,
+	// SWR2:     true,
+	TXT: true,
+}
+
+func (d RealtimeDataset) IsValid() bool {
+	_, ok := validDataset[d]
+	return ok
+}
 
 type MeteorologicalObservation struct {
 	Datetime            time.Time `json:"datetime"`
@@ -64,7 +86,6 @@ type WaveSummaryObservation struct {
 
 // Encodes time.Time object to ISODateString
 func (o MeteorologicalObservation) MarshalJSON() ([]byte, error) {
-	// TODO: refactor
 	metObs := struct {
 		Datetime            string  `json:"datetime"`
 		WindDirection       int16   `json:"wind_direction"`
@@ -107,13 +128,16 @@ func (o MeteorologicalObservation) MarshalJSON() ([]byte, error) {
 // 	)
 // }
 
-// TODO: add support for other realtime datasets and different return signatures (json, struct)
-func GetRealtime(stationId string) string {
-	url := fmt.Sprintf("%s/%s.%s", Realtime, stationId, TXT)
+func Realtime(stationId string, dataset RealtimeDataset) ([]MeteorologicalObservation, error) {
+	if valid := dataset.IsValid(); !valid {
+		return nil, fmt.Errorf("unknown dataset '%s'", dataset)
+	}
+	url := fmt.Sprintf("%s/%s.%s", RealtimeURL, stationId, dataset)
 
-	data := realtimeMeteorological(url)
+	data, err := realtimeMeteorological(url)
+	if err != nil {
+		return nil, err
+	}
 
-	jsonData, _ := json.Marshal(data)
-
-	return string(jsonData)
+	return data, nil
 }

@@ -9,6 +9,9 @@ import (
 func NewRouter(app *app.Application) *http.ServeMux {
 	mux := http.NewServeMux()
 
+	mux.HandleFunc("/buoy/{stationID}", Buoy(app))
+	mux.HandleFunc("/buoys", Buoys(app))
+
 	mux.HandleFunc("/status", Status(app))
 
 	return mux

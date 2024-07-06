@@ -3,7 +3,7 @@ package noaa
 import (
 	"encoding/csv"
 	"io"
-	"log"
+	"log/slog"
 	"net/http"
 	"regexp"
 	"strconv"
@@ -11,36 +11,174 @@ import (
 	"time"
 )
 
-func request(url string) ([]byte, int) {
+func extractHeaders(r *csv.Reader) ([]string, []string, error) {
+	var headers []string
+	var units []string
+
+	for i := 0; i < 2; i++ {
+		record, err := r.Read()
+		if err == io.EOF {
+			return nil, nil, NewError("not enough data", err)
+		}
+		if err != nil {
+			return nil, nil, NewError("error reading CSV", err)
+		}
+		if i == 0 {
+			headers = record
+		} else {
+			units = record
+		}
+	}
+
+	return headers, units, nil
+}
+
+func request(url string) ([]byte, int, error) {
 	response, err := http.Get(url)
 	if err != nil {
-		log.Fatalln(err)
+		return nil, 0, err
 	}
 	defer func(Body io.ReadCloser) {
 		err := Body.Close()
 		if err != nil {
-			log.Fatal(err)
+			slog.Error(err.Error())
 		}
 	}(response.Body)
 
 	body, err := io.ReadAll(response.Body)
 	if err != nil {
-		log.Fatalln(err)
+		return nil, 0, err
 	}
 
-	// TODO: improve support for error handling and logging
-	return body, response.StatusCode
+	return body, response.StatusCode, nil
 }
 
-func realtimeMeteorological(url string) []MeteorologicalObservation {
-	body, statusCode := request(url)
-	if statusCode != 200 {
-		log.Fatal(statusCode)
+func parseValue(value string) (float32, error) {
+	if value == "MM" {
+		return 0, nil
+	}
+
+	parsedValue, err := strconv.ParseFloat(value, 32)
+	if err != nil {
+		return 0, err
+	}
+
+	return float32(parsedValue), nil
+}
+
+func parseRecordToStruct(record []string, mo *MeteorologicalObservation) error {
+	// TODO: refactor parsing approach
+
+	row := record[0]
+	trimmed := strings.TrimSpace(row)
+	singleSpacePattern := regexp.MustCompile(`\s+`)
+	rowValues := strings.Split(singleSpacePattern.ReplaceAllString(trimmed, " "), " ")
+
+	year, _ := strconv.ParseInt(rowValues[0], 10, 16)
+	month, _ := strconv.ParseInt(rowValues[1], 10, 16)
+	day, _ := strconv.ParseInt(rowValues[2], 10, 16)
+	hour, _ := strconv.ParseInt(rowValues[3], 10, 16)
+	minute, _ := strconv.ParseInt(rowValues[4], 10, 16)
+	mo.Datetime = time.Date(int(year), time.Month(month), int(day), int(hour), int(minute), 0, 0, time.UTC)
+
+	if value, err := parseValue(rowValues[5]); err == nil {
+		mo.WindDirection = int16(value)
+	} else {
+		return err
+	}
+
+	if value, err := parseValue(rowValues[6]); err == nil {
+		mo.WindSpeed = value
+	} else {
+		return err
+	}
+
+	if value, err := parseValue(rowValues[7]); err == nil {
+		mo.WindGust = value
+	} else {
+		return err
+	}
+
+	if value, err := parseValue(rowValues[8]); err == nil {
+		mo.WaveHeight = value
+	} else {
+		return err
+	}
+
+	if value, err := parseValue(rowValues[9]); err == nil {
+		mo.DominantWavePeriod = value
+	} else {
+		return err
+	}
+
+	if value, err := parseValue(rowValues[10]); err == nil {
+		mo.AverageWavePeriod = value
+	} else {
+		return err
+	}
+
+	if value, err := parseValue(rowValues[11]); err == nil {
+		mo.WaveDirection = int16(value)
+	} else {
+		return err
+	}
+
+	if value, err := parseValue(rowValues[12]); err == nil {
+		mo.SeaLevelPressure = value
+	} else {
+		return err
+	}
+
+	if value, err := parseValue(rowValues[13]); err == nil {
+		mo.AirTemperature = value
+	} else {
+		return err
+	}
+
+	if value, err := parseValue(rowValues[14]); err == nil {
+		mo.WaterTemperature = value
+	} else {
+		return err
+	}
+
+	if value, err := parseValue(rowValues[15]); err == nil {
+		mo.DewpointTemperature = value
+	} else {
+		return err
+	}
+
+	if value, err := parseValue(rowValues[16]); err == nil {
+		mo.Visibility = value
+	} else {
+		return err
+	}
+
+	if value, err := parseValue(rowValues[17]); err == nil {
+		mo.PressureTendency = value
+	} else {
+		return err
+	}
+
+	if value, err := parseValue(rowValues[18]); err == nil {
+		mo.Tide = value
+	} else {
+		return err
+	}
+
+	return nil
+}
+
+func realtimeMeteorological(url string) ([]MeteorologicalObservation, error) {
+	body, statusCode, err := request(url)
+	if err != nil {
+		return nil, NewRequestError(statusCode, err.Error(), err)
 	}
 
 	r := csv.NewReader(strings.NewReader(string(body)))
 	r.FieldsPerRecord = 0
 	r.TrimLeadingSpace = true
+
+	extractHeaders(r)
 
 	var mos []MeteorologicalObservation
 	for {
@@ -50,65 +188,14 @@ func realtimeMeteorological(url string) []MeteorologicalObservation {
 			break
 		}
 		if err != nil {
-			log.Fatal(err)
+			return nil, NewError("error reading CSV", err)
 		}
 
-		// TODO: refactor parsing approach
-		row := record[0]
-		trimmed := strings.TrimSpace(row)
-		singleSpacePattern := regexp.MustCompile(`\s+`)
-		rowValues := strings.Split(singleSpacePattern.ReplaceAllString(trimmed, " "), " ")
-
-		year, _ := strconv.ParseInt(rowValues[0], 10, 16)
-		month, _ := strconv.ParseInt(rowValues[1], 10, 16)
-		day, _ := strconv.ParseInt(rowValues[2], 10, 16)
-		hour, _ := strconv.ParseInt(rowValues[3], 10, 16)
-		minute, _ := strconv.ParseInt(rowValues[4], 10, 16)
-		mo.Datetime = time.Date(int(year), time.Month(month), int(day), int(hour), int(minute), 0, 0, time.UTC)
-
-		windDirValue, _ := strconv.ParseFloat(rowValues[5], 32)
-		mo.WindDirection = int16(windDirValue)
-
-		windSpeedValue, _ := strconv.ParseFloat(rowValues[6], 32)
-		mo.WindSpeed = float32(windSpeedValue)
-
-		windGustValue, _ := strconv.ParseFloat(rowValues[7], 32)
-		mo.WindGust = float32(windGustValue)
-
-		waveHeightValue, _ := strconv.ParseFloat(rowValues[8], 32)
-		mo.WaveHeight = float32(waveHeightValue)
-
-		dominantWavePeriodValue, _ := strconv.ParseFloat(rowValues[9], 32)
-		mo.DominantWavePeriod = float32(dominantWavePeriodValue)
-
-		averageWavePeriodValue, _ := strconv.ParseFloat(rowValues[10], 32)
-		mo.AverageWavePeriod = float32(averageWavePeriodValue)
-
-		waveDirectionValue, _ := strconv.ParseFloat(rowValues[11], 32)
-		mo.WaveDirection = int16(waveDirectionValue)
-
-		seaLevelPresValue, _ := strconv.ParseFloat(rowValues[12], 32)
-		mo.SeaLevelPressure = float32(seaLevelPresValue)
-
-		airTempValue, _ := strconv.ParseFloat(rowValues[13], 32)
-		mo.AirTemperature = float32(airTempValue)
-
-		waterTempValue, _ := strconv.ParseFloat(rowValues[14], 32)
-		mo.WaterTemperature = float32(waterTempValue)
-
-		dewpointTempValue, _ := strconv.ParseFloat(rowValues[15], 32)
-		mo.DewpointTemperature = float32(dewpointTempValue)
-
-		visibilityValue, _ := strconv.ParseFloat(rowValues[16], 32)
-		mo.Visibility = float32(visibilityValue)
-
-		pressureTendencyVal, _ := strconv.ParseFloat(rowValues[17], 32)
-		mo.PressureTendency = float32(pressureTendencyVal)
-
-		tideVal, _ := strconv.ParseFloat(rowValues[18], 32)
-		mo.Tide = float32(tideVal)
+		if err := parseRecordToStruct(record, &mo); err != nil {
+			return nil, NewError("error parsing meteorological record to struct", err)
+		}
 
 		mos = append(mos, mo)
 	}
-	return mos
+	return mos, err
 }
