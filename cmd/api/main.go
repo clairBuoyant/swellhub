@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log/slog"
 	"os"
 	"runtime/debug"
 	"sync"
@@ -9,6 +8,7 @@ import (
 	"github.com/clairBuoyant/swellhub/internal/app"
 	"github.com/clairBuoyant/swellhub/internal/http"
 	"github.com/clairBuoyant/swellhub/pkg/env"
+	"github.com/clairBuoyant/swellhub/pkg/log"
 )
 
 func main() {
@@ -16,7 +16,7 @@ func main() {
 		Port: env.GetInt("PORT", 4000),
 	}
 
-	log := slog.New(slog.NewJSONHandler(os.Stdout, &slog.HandlerOptions{Level: slog.LevelDebug}))
+	log := log.InitLoggerJSON()
 
 	var wg sync.WaitGroup
 
