@@ -1,13 +1,22 @@
 ---
 actions:
-  - .github/**/*
+  - changed-files:
+      - any-glob-to-any-file: ['.github/*']
 config:
-  - .editorconfig
-  - .gitignore
+  - changed-files:
+      - any-glob-to-any-file:
+          - '.air.toml'
+          - '.dockerignore'
+          - '.editorconfig'
+          - '.gitignore'
+          - '.github/*'
+          - 'renovate.json'
 dependencies:
-  - renovate.json
+  - changed-files:
+      - any-glob-to-any-file: ['package.json', 'package-lock.json']
 docs:
-  - '**/*.md'
-  - docs/**/*
+  - changed-files:
+      - any-glob-to-any-file: ['docs/*', '**/*.md']
 test:
-  - tests/**/*
+  - changed-files:
+      - any-glob-to-any-file: ['tests/*']
