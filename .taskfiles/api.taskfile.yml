@@ -3,11 +3,13 @@ version: '3'
 
 tasks:
   build:
-    desc: "Compile"
+    desc: Compile
     cmds:
-      - go build ./cmd/api
+      - go build -o {{.OUTPUT_FILE}} {{.BUILD_TARGET}}
+    requires:
+      vars: [BUILD_TARGET, OUTPUT_FILE]
 
   run:
-    desc: "Compile and run."
+    desc: Compile and run
     cmds:
       - go run ./cmd/api

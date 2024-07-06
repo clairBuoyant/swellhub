@@ -5,10 +5,16 @@ includes:
   api:
     taskfile: .taskfiles/api.taskfile.yml
     optional: true
+    vars:
+      BUILD_TARGET: '{{default "./cmd/api" .BUILD_TARGET}}'
+      OUTPUT_FILE: '{{default "api" .OUTPUT_FILE}}'
 
   noaa:
     taskfile: .taskfiles/noaa.taskfile.yml
     optional: true
+    vars:
+      BUILD_TARGET: '{{default "./cmd/noaa" .BUILD_TARGET}}'
+      OUTPUT_FILE: '{{default "noaa" .OUTPUT_FILE}}'
 
   web:
     taskfile: .taskfiles/web.taskfile.yml

@@ -3,11 +3,16 @@ version: '3'
 
 tasks:
   build:
-    desc: "Transpile for production."
+    desc: Transpile for production
     cmds:
       - npm run build
 
   deps:
-    desc: "Install all dependencies."
+    desc: Install all dependencies
     cmds:
       - npm ci
+
+  run:
+    desc: Run Web with Vite dev server
+    cmds:
+      - npm run dev

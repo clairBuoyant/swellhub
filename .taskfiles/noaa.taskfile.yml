@@ -2,7 +2,14 @@
 version: '3'
 
 tasks:
-  run:
-    desc: "Compile and run."
+  build:
+    desc: Compile
     cmds:
-      - go run ./cmd/noaa
+      - go build -o {{.OUTPUT_FILE}} {{.BUILD_TARGET}}
+    requires:
+      vars: [BUILD_TARGET, OUTPUT_FILE]
+
+  run:
+    desc: Compile and run
+    cmds:
+      - go run ./cmd/noaa {{.CLI_ARGS}}
