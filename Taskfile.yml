@@ -17,6 +17,7 @@ includes:
       OUTPUT_FILE: '{{default "noaa" .OUTPUT_FILE}}'
 
   web:
+    dir: ./web
     taskfile: .taskfiles/web.taskfile.yml
     optional: true
 
