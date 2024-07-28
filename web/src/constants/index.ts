@@ -5,9 +5,7 @@ export const NODE_ENV = {
 
 const BASE_API_URL = import.meta.env.DEV ? 'http://127.0.0.1:4000' : 'https://clairbuoyant.live';
 
-export const API_VERSION = 'v1';
-export const BASE_API_URI = `${BASE_API_URL}/api/${API_VERSION}`;
 export const API_ROUTES = {
-  BUOYS: `${BASE_API_URI}/buoys`,
-  COASTLINES: `${BASE_API_URI}/coastlines`,
+  BUOYS: `${BASE_API_URL}/buoys`,
+  COASTLINES: `${BASE_API_URL}/coastlines`,
 };

@@ -5,6 +5,9 @@
       "changeProcessCWD": true
     }
   ],
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
   "typescript.tsdk": "./web/node_modules/typescript/lib",
   "yaml.format.singleQuote": true,
   "yaml.schemas": {

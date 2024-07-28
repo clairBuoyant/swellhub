@@ -67,7 +67,7 @@ func parseValue(value string) (float32, error) {
 }
 
 func parseRecordToStruct(record []string, mo *MeteorologicalObservation) error {
-	// TODO: refactor parsing approach
+	// TODO(@kylejb): refactor parsing approach
 
 	row := record[0]
 	trimmed := strings.TrimSpace(row)

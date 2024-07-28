@@ -2,6 +2,11 @@
 version: '3'
 
 tasks:
+  browserslist:update:
+    internal: true
+    cmds:
+      - npx update-browserslist-db@latest
+
   build:
     desc: Transpile for production
     cmds:
@@ -11,6 +16,7 @@ tasks:
     desc: Install all dependencies
     cmds:
       - npm ci
+      - task: browserslist-update
 
   run:
     desc: Run Web with Vite dev server

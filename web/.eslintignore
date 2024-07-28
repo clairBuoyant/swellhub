@@ -2,6 +2,7 @@
 tsconfig.json
 tsconfig.*.json
 **/*.config.ts
+**/*.config.js
 
 # dependencies
 node_modules

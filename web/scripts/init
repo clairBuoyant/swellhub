@@ -5,5 +5,5 @@
 CURRENT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
 BASE_DIR="$(dirname "$CURRENT_DIR")"
 
-${BASE_DIR}/scripts/bootstrap
-${BASE_DIR}/scripts/setup
+"${BASE_DIR}"/scripts/bootstrap
+"${BASE_DIR}"/scripts/setup

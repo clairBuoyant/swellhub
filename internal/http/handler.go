@@ -13,6 +13,21 @@ type application interface {
 	ServerError(w http.ResponseWriter, r *http.Request, err error, code int)
 }
 
+func AuthMe(app application) http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		type Me struct {
+			FirstName string `json:"firstName"`
+		}
+
+		// TODO(@kylejb): provide user information
+		if err := response.JSON(w, http.StatusOK, Me{
+			FirstName: "UserFirstNameGoesHere (TESTING)",
+		}); err != nil {
+			app.ServerError(w, r, errors.NewAppError(http.StatusInternalServerError, "failed to encode response", err), 0)
+		}
+	}
+}
+
 func Buoy(app application) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		dataset := noaa.RealtimeDataset(r.URL.Query().Get("dataset"))
@@ -25,10 +40,10 @@ func Buoy(app application) http.HandlerFunc {
 			return
 		}
 
-		// TODO: add validation for stationID too
+		// TODO(@kylejb): add validation for stationID too
 		data, err := noaa.Realtime(r.PathValue("stationID"), dataset)
 		if err != nil {
-			// TODO: dynamically provide http status code
+			// TODO(@kylejb): dynamically provide http status code
 			app.ServerError(w, r, errors.NewAppError(http.StatusNotAcceptable, "failed to encode response", err), http.StatusNotAcceptable)
 			return
 		}

@@ -7,12 +7,15 @@
     "outDir": "dist",
     "paths": {
       "@components/*": ["components/*"],
-      "@constants": ["constants/index.ts"],
+      "@config/*": ["config/*"],
+      "@constants": ["constants/index"],
       "@features/*": ["features/*"],
-      "@hooks": ["hooks/index.ts"],
-      "@layouts/*": ["layouts/*"],
-      "@types": ["types/index.ts"],
-      "@views/*": ["views/*"]
+      "@hooks": ["hooks/index"],
+      "@hooks/*": ["hooks/*"],
+      "@layouts/*": ["components/layouts/*"],
+      "@lib/*": ["lib/*"],
+      "@types": ["types/index"],
+      "@utils/*": ["utils/*"]
     },
     "skipLibCheck": true,
     "target": "ESNext",

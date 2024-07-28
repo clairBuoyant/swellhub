@@ -7,20 +7,20 @@ import (
 
 type Stations struct {
 	XMLName  xml.Name  `xml:"stations" json:"-"`
-	Stations []Station `xml:"station"`
+	Stations []Station `xml:"station" json:"stations"`
 }
 
 type Station struct {
 	XMLName      xml.Name `xml:"station" json:"-"`
-	ID           string   `xml:"id,attr"`
-	Lat          float32  `xml:"lat,attr"`
-	Lon          float32  `xml:"lon,attr"`
-	Name         string   `xml:"name,attr"`
-	Owner        string   `xml:"owner,attr"`
-	Type         string   `xml:"type,attr"`
-	Met          string   `xml:"met,attr"`
-	Currents     string   `xml:"currents,attr"`
-	WaterQuality string   `xml:"waterquality,attr"`
+	ID           string   `xml:"id,attr" json:"id"`
+	Lat          float32  `xml:"lat,attr" json:"latitude"`
+	Lon          float32  `xml:"lon,attr" json:"longitude"`
+	Name         string   `xml:"name,attr" json:"name"`
+	Owner        string   `xml:"owner,attr" json:"owner"`
+	Type         string   `xml:"type,attr" json:"type"`
+	Met          string   `xml:"met,attr" json:"met"`
+	Currents     string   `xml:"currents,attr" json:"currents"`
+	WaterQuality string   `xml:"waterquality,attr" json:"waterQuality"`
 }
 
 // ActiveStations provides information about all currently active
