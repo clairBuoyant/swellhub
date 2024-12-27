@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/clairBuoyant/swellhub/internal/app"
+	"github.com/clairBuoyant/swellhub/web"
 )
 
 func NewRouter(app *app.Application) *http.ServeMux {
@@ -15,6 +16,8 @@ func NewRouter(app *app.Application) *http.ServeMux {
 	mux.HandleFunc("/buoys", Buoys(app))
 
 	mux.HandleFunc("/status", Status(app))
+
+	mux.HandleFunc("/", web.SPAHandler())
 
 	return mux
 }
