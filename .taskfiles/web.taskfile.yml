@@ -12,6 +12,13 @@ tasks:
     cmds:
       - npm run build
 
+  clean:
+    silent: true
+    desc: Clean dist directory
+    cmds:
+      - |
+        [ -d 'dist' ] && rm -rf dist || true
+
   deps:
     desc: Install all dependencies
     cmds:
