@@ -1,4 +1,4 @@
-# TODO(@kylejb): revisit directory structure to simplify embedding of web
+# TODO(@kylejb): revisit directory structure to simplify embedding of web and set non-root user for security
 FROM node:lts-alpine AS web_builder
 
 RUN npm i -g @go-task/cli
