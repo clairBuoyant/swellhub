@@ -32,6 +32,8 @@ export default function AppProvider({ children }: AppProviderProps) {
                   <Spinner size="xl" />
                 </div>
               )}
+              // TODO(@kylejb): create component for cleaner error handling
+              renderError={() => <div>OOPS</div>}
             >
               {children}
             </AuthLoader>
