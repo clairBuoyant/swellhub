@@ -7,11 +7,9 @@ import { env } from '@config/env';
 
 function authRequestInterceptor(config: InternalAxiosRequestConfig) {
   if (config.headers) {
-    // eslint-disable-next-line no-param-reassign
     config.headers.Accept = 'application/json';
   }
 
-  // eslint-disable-next-line no-param-reassign
   config.withCredentials = true;
   return config;
 }
