@@ -19,16 +19,16 @@
 // LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
-//
-// Adjusted to support react-query v5
-import type {
-  QueryKey,
-  UseQueryOptions,
-  QueryFunction,
-  MutationFunction,
-  UseMutationOptions,
+import {
+  type MutationFunction,
+  type QueryFunction,
+  type QueryKey,
+  type UseMutationOptions,
+  type UseQueryOptions,
+  useMutation,
+  useQuery,
+  useQueryClient,
 } from '@tanstack/react-query';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { type ReactNode, useCallback } from 'react';
 
 export interface ReactQueryAuthConfig<User, LoginCredentials, RegisterCredentials> {
@@ -50,7 +50,12 @@ export function configureAuth<User, Error, LoginCredentials, RegisterCredentials
 
   const useUser = (
     options?: Omit<UseQueryOptions<User, Error, User, QueryKey>, 'queryKey' | 'queryFn'>,
-  ) => useQuery({ queryFn: userFn, queryKey: userKey, ...options });
+  ) =>
+    useQuery({
+      queryKey: userKey,
+      queryFn: userFn,
+      ...options,
+    });
 
   const useLogin = (
     options?: Omit<UseMutationOptions<User, Error, LoginCredentials>, 'mutationFn'>,
@@ -127,7 +132,7 @@ export function configureAuth<User, Error, LoginCredentials, RegisterCredentials
       if (renderUnauthenticated && !data) {
         return renderUnauthenticated();
       }
-      return children;
+      return <>{children}</>;
     }
 
     if (!isFetched) {
