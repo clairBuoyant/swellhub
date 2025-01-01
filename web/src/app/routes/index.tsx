@@ -1,12 +1,14 @@
 import type { QueryClient } from '@tanstack/react-query';
 import { createBrowserRouter } from 'react-router-dom';
 
+import { Spinner } from '@components/ui/spinner';
 import { buoysLoader } from './app/buoys/buoys';
 import AppRoot from './app/root';
 
 export const createRouter = (queryClient: QueryClient) =>
   createBrowserRouter([
     {
+      hydrateFallbackElement: <Spinner />,
       lazy: async () => {
         const { LandingRoute } = await import('./landing');
         return { Component: LandingRoute };
