@@ -4,7 +4,6 @@
     "eamodio.gitlens",
     "esbenp.prettier-vscode",
     "mhutchie.git-graph",
-    "EditorConfig.EditorConfig",
-    "Gruntfuggly.todo-tree"
+    "EditorConfig.EditorConfig"
   ]
 }
