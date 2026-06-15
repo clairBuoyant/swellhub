@@ -1,0 +1,5 @@
+# Generated code — not first-party and shouldn't be audited with our rules.
+# protobuf-go emits unsafe.Pointer, which trips
+# go.lang.security.audit.unsafe.use-of-unsafe-block.
+gen/
+web/src/gen/
