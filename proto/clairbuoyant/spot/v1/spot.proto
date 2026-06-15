@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package clairbuoyant.spot.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/clairBuoyant/swellhub/gen/clairbuoyant/spot/v1;spotv1";
+
+// Spot is a surf break and the static config used to interpret conditions there.
+message Spot {
+  // Stable slug, e.g. "rockaway-90th". Doubles as the GetSpot id and the
+  // shareable frontend route.
+  string id = 1;
+  string name = 2;
+  // Region code, e.g. "NY" or "NJ".
+  string region = 3;
+  double latitude = 4;
+  double longitude = 5;
+  // Compass degrees the beach faces (azimuth of the seaward normal). The key
+  // input for deriving offshore/cross/onshore wind in the rating engine.
+  int32 orientation_degrees = 6;
+  // Prioritized NDBC buoy station IDs; the first reachable one is used, the
+  // rest are fallbacks.
+  repeated string buoy_ids = 7;
+  // IANA timezone, e.g. "America/New_York", for spot-local time rendering.
+  string timezone = 8;
+}
+
+// Conditions is the latest meteorological observation for a spot, sourced from
+// one of its mapped buoys. Nullable readings are `optional` so a missing value
+// (NDBC "MM" sentinel) is distinguishable from a real zero.
+message Conditions {
+  // The buoy these readings came from (may be a fallback, not the primary).
+  string buoy_id = 1;
+  google.protobuf.Timestamp observed_at = 2;
+  optional double wave_height_m = 3;
+  optional double dominant_wave_period_s = 4;
+  optional double average_wave_period_s = 5;
+  optional int32 wave_direction_deg = 6;
+  optional int32 wind_direction_deg = 7;
+  optional double wind_speed_mps = 8;
+  optional double wind_gust_mps = 9;
+  optional double air_temperature_c = 10;
+  optional double water_temperature_c = 11;
+  optional double sea_level_pressure_hpa = 12;
+}
+
+// SpotConditions pairs a spot with its latest conditions.
+message SpotConditions {
+  Spot spot = 1;
+  // Absent when none of the spot's mapped buoys returned usable data.
+  optional Conditions conditions = 2;
+}
+
+message ListSpotsRequest {}
+
+message ListSpotsResponse {
+  repeated Spot spots = 1;
+}
+
+message GetSpotRequest {
+  string id = 1;
+}
+
+message GetSpotResponse {
+  SpotConditions spot_conditions = 1;
+}
+
+// SpotService exposes surf spots and their current conditions.
+service SpotService {
+  // ListSpots returns all configured spots (config only, no conditions).
+  rpc ListSpots(ListSpotsRequest) returns (ListSpotsResponse) {}
+  // GetSpot returns a spot joined with the latest conditions from its primary
+  // reachable buoy. Unknown id yields CodeNotFound.
+  rpc GetSpot(GetSpotRequest) returns (GetSpotResponse) {}
+}

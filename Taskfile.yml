@@ -18,6 +18,10 @@ includes:
       BUILD_TARGET: '{{default "./cmd/noaa" .BUILD_TARGET}}'
       OUTPUT_FILE: '{{default "noaa" .OUTPUT_FILE}}'
 
+  proto:
+    taskfile: .taskfiles/proto.taskfile.yml
+    optional: true
+
   web:
     dir: ./web
     taskfile: .taskfiles/web.taskfile.yml

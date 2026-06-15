@@ -10,6 +10,7 @@
       "@config/*": ["config/*"],
       "@constants": ["constants/index"],
       "@features/*": ["features/*"],
+      "@gen/*": ["gen/*"],
       "@hooks": ["hooks/index"],
       "@hooks/*": ["hooks/*"],
       "@layouts/*": ["components/layouts/*"],

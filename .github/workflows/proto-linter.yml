@@ -1,0 +1,40 @@
+name: proto-linter
+
+on:
+  pull_request:
+    paths:
+      - 'proto/**'
+      - 'buf.yaml'
+      - 'buf.gen.yaml'
+      - '.github/workflows/proto-linter.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  buf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: bufbuild/buf-setup-action@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Lint
+        run: buf lint
+      # TODO(#215): drop this baseline guard once main has a buf.yaml. Breaking-
+      # change detection needs a baseline on main, so we skip it until main has a
+      # buf.yaml (i.e. on the PR that first introduces protobuf); afterwards it
+      # runs on every change and the guard can be removed.
+      - name: Check baseline exists on main
+        id: baseline
+        run: |
+          if git cat-file -e origin/main:buf.yaml 2>/dev/null; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Breaking change check
+        if: steps.baseline.outputs.exists == 'true'
+        run: buf breaking --against '.git#branch=main'
