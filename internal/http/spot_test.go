@@ -1,4 +1,4 @@
-package spotsvc
+package http
 
 import (
 	"context"
@@ -14,8 +14,8 @@ import (
 	"github.com/clairBuoyant/swellhub/pkg/noaa"
 )
 
-func testService(fn realtimeFunc) *Service {
-	return &Service{
+func testService(fn realtimeFunc) *spotService {
+	return &spotService{
 		logger:   slog.New(slog.NewTextHandler(io.Discard, nil)),
 		realtime: fn,
 	}

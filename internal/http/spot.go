@@ -1,6 +1,4 @@
-// Package spotsvc implements the Connect SpotService: it serves configured
-// spots and joins each with the latest conditions from its mapped buoys.
-package spotsvc
+package http
 
 import (
 	"context"
@@ -19,19 +17,21 @@ import (
 // can stub NDBC.
 type realtimeFunc func(stationID string, dataset noaa.RealtimeDataset) ([]noaa.MeteorologicalObservation, error)
 
-// Service implements spotv1connect.SpotServiceHandler.
-type Service struct {
+// spotService implements the Connect SpotService (spotv1connect.SpotServiceHandler):
+// it serves configured spots, each joined with the latest conditions from its
+// mapped buoys.
+type spotService struct {
 	logger   *slog.Logger
 	realtime realtimeFunc
 }
 
-// New returns a Service backed by live NDBC data.
-func New(logger *slog.Logger) *Service {
-	return &Service{logger: logger, realtime: noaa.Realtime}
+// newSpotService returns a spotService backed by live NDBC data.
+func newSpotService(logger *slog.Logger) *spotService {
+	return &spotService{logger: logger, realtime: noaa.Realtime}
 }
 
 // ListSpots returns all configured spots (config only).
-func (s *Service) ListSpots(
+func (s *spotService) ListSpots(
 	_ context.Context,
 	_ *connect.Request[spotv1.ListSpotsRequest],
 ) (*connect.Response[spotv1.ListSpotsResponse], error) {
@@ -45,7 +45,7 @@ func (s *Service) ListSpots(
 
 // GetSpot returns a spot joined with the latest conditions from its primary
 // reachable buoy. Unknown id yields CodeNotFound.
-func (s *Service) GetSpot(
+func (s *spotService) GetSpot(
 	_ context.Context,
 	req *connect.Request[spotv1.GetSpotRequest],
 ) (*connect.Response[spotv1.GetSpotResponse], error) {
@@ -64,7 +64,7 @@ func (s *Service) GetSpot(
 
 // latestConditions returns the most recent observation from the first mapped
 // buoy that responds with data, or nil if none do.
-func (s *Service) latestConditions(sp spot.Spot) *spotv1.Conditions {
+func (s *spotService) latestConditions(sp spot.Spot) *spotv1.Conditions {
 	for _, buoyID := range sp.BuoyIDs {
 		obs, err := s.realtime(buoyID, noaa.TXT)
 		if err != nil {

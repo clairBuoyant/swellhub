@@ -5,7 +5,6 @@ import (
 
 	"github.com/clairBuoyant/swellhub/gen/clairbuoyant/spot/v1/spotv1connect"
 	"github.com/clairBuoyant/swellhub/internal/app"
-	"github.com/clairBuoyant/swellhub/internal/spotsvc"
 	"github.com/clairBuoyant/swellhub/web"
 )
 
@@ -19,7 +18,7 @@ func NewRouter(app *app.Application) *http.ServeMux {
 
 	// Connect SpotService (clairbuoyant.spot.v1). Coexists with the legacy REST
 	// buoy endpoints on the same mux; matched before the SPA catch-all.
-	spotPath, spotHandler := spotv1connect.NewSpotServiceHandler(spotsvc.New(app.Logger))
+	spotPath, spotHandler := spotv1connect.NewSpotServiceHandler(newSpotService(app.Logger))
 	mux.Handle(spotPath, spotHandler)
 
 	mux.HandleFunc("/status", Status(app))
