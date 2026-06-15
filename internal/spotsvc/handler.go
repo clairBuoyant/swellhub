@@ -11,8 +11,8 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	spotv1 "github.com/clairBuoyant/swellhub/gen/clairbuoyant/spot/v1"
+	"github.com/clairBuoyant/swellhub/internal/spot"
 	"github.com/clairBuoyant/swellhub/pkg/noaa"
-	"github.com/clairBuoyant/swellhub/pkg/spot"
 )
 
 // realtimeFunc fetches realtime observations for a station. Injected so tests
