@@ -4,6 +4,7 @@ dist
 node_modules
 public
 scripts
+src/gen
 
 # configuration
 .eslintrc.json

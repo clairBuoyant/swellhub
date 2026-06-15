@@ -11,6 +11,7 @@ export default defineConfig({
       '@config': resolve(__dirname, 'src/config'),
       '@constants': resolve(__dirname, 'src/constants'),
       '@features': resolve(__dirname, 'src/features'),
+      '@gen': resolve(__dirname, 'src/gen'),
       '@hooks': resolve(__dirname, 'src/hooks'),
       '@layouts': resolve(__dirname, 'src/components/layouts'),
       '@lib': resolve(__dirname, 'src/lib'),
@@ -25,6 +26,15 @@ export default defineConfig({
   server: {
     host: '127.0.0.1',
     port: 3000,
+    proxy: {
+      // Proxy Connect RPCs (clairbuoyant.*) to the Go API in dev so the browser
+      // talks same-origin and we avoid CORS. In prod the SPA is embedded and
+      // served by the API, so the origin is already correct.
+      '^/clairbuoyant\\.': {
+        target: 'http://127.0.0.1:4000',
+        changeOrigin: true,
+      },
+    },
   },
   test: {
     globals: true,
