@@ -7,12 +7,6 @@ on:
       - 'buf.yaml'
       - 'buf.gen.yaml'
       - '.github/workflows/proto-linter.yml'
-  push:
-    branches: [main]
-    paths:
-      - 'proto/**'
-      - 'buf.yaml'
-      - 'buf.gen.yaml'
 
 permissions:
   contents: read
@@ -29,9 +23,10 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Lint
         run: buf lint
-      # Breaking-change detection needs a baseline on main. Skip it until main
-      # has a buf.yaml (i.e. on the PR that first introduces protobuf), then it
-      # runs on every subsequent change.
+      # TODO(#215): drop this baseline guard once main has a buf.yaml. Breaking-
+      # change detection needs a baseline on main, so we skip it until main has a
+      # buf.yaml (i.e. on the PR that first introduces protobuf); afterwards it
+      # runs on every change and the guard can be removed.
       - name: Check baseline exists on main
         id: baseline
         run: |
