@@ -22,6 +22,10 @@ includes:
     taskfile: .taskfiles/proto.taskfile.yml
     optional: true
 
+  db:
+    taskfile: .taskfiles/db.taskfile.yml
+    optional: true
+
   web:
     dir: ./web
     taskfile: .taskfiles/web.taskfile.yml

@@ -1,0 +1,46 @@
+---
+version: '3'
+
+vars:
+  DSN: 'postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@127.0.0.1:5432/$POSTGRES_DB?sslmode=disable'
+
+tasks:
+  env:
+    desc: Materialize the gitignored .env from 1Password
+    cmds:
+      - op inject -f -i env.tmpl -o .env
+
+  up:
+    desc: Start the local Postgres container and wait until healthy
+    cmds:
+      - docker compose up -d --wait postgres
+
+  down:
+    desc: Stop and remove the local Postgres container
+    cmds:
+      - docker compose down
+
+  generate:
+    desc: Generate sqlc code from SQL (via Docker)
+    cmds:
+      - docker run --rm -v "{{.ROOT_DIR}}:/src" -w /src sqlc/sqlc:latest generate
+
+  migrate:
+    desc: Apply migrations and seed spots
+    cmds:
+      - DATABASE_URL="${DATABASE_URL:-{{.DSN}}}" go run ./cmd/migrate up
+
+  rollback:
+    desc: Roll back the most recent migration
+    cmds:
+      - DATABASE_URL="${DATABASE_URL:-{{.DSN}}}" go run ./cmd/migrate down
+
+  status:
+    desc: Show migration status
+    cmds:
+      - DATABASE_URL="${DATABASE_URL:-{{.DSN}}}" go run ./cmd/migrate status
+
+  test:
+    desc: Run store integration tests against the local DB
+    cmds:
+      - TEST_DATABASE_URL="${TEST_DATABASE_URL:-{{.DSN}}}" go test ./internal/store/... -count=1

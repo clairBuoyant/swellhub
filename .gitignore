@@ -75,6 +75,11 @@ logs
 *.sqlite3
 *.sqlite3-journal
 
+# Source SQL is tracked (migrations + sqlc queries); the *.sql ignore above
+# targets DB dumps/data, not source.
+!internal/db/migrations/*.sql
+!internal/db/query/*.sql
+
 # ----------------------------------------------------------------------
 # | OS Generated Files                                                 |
 # ----------------------------------------------------------------------
