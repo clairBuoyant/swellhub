@@ -1,0 +1,53 @@
+name: go-ci
+
+on:
+  pull_request:
+    paths:
+      - '**.go'
+      - 'go.mod'
+      - 'go.sum'
+      - '.github/workflows/go-ci.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: swellhub
+          POSTGRES_PASSWORD: swellhub
+          POSTGRES_DB: swellhub
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U swellhub -d swellhub"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+
+    env:
+      # Integration tests (e.g. internal/store) self-migrate against this and
+      # run; packages that don't use it are unaffected. Suites skip it when unset.
+      TEST_DATABASE_URL: postgres://swellhub:swellhub@127.0.0.1:5432/swellhub?sslmode=disable
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - name: Stub embedded web assets
+        # cmd/api embeds web/dist (built separately by the web pipeline); a stub
+        # satisfies the //go:embed for this Go-only job.
+        run: mkdir -p web/dist && printf '<!doctype html>\n' > web/dist/index.html
+      - name: Build
+        run: go build ./...
+      - name: Vet
+        run: go vet ./...
+      - name: Test
+        run: go test ./... -count=1
