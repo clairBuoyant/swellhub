@@ -13,7 +13,7 @@ type Querier interface {
 	InsertFeedback(ctx context.Context, arg InsertFeedbackParams) (Feedback, error)
 	LatestObservation(ctx context.Context, stationID string) (Observation, error)
 	ListSpots(ctx context.Context) ([]Spot, error)
-	UpsertObservation(ctx context.Context, arg UpsertObservationParams) error
+	UpsertObservation(ctx context.Context, arg UpsertObservationParams) (int64, error)
 	UpsertSpot(ctx context.Context, arg UpsertSpotParams) error
 }
 

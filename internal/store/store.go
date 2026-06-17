@@ -55,7 +55,7 @@ type Store interface {
 	ListSpots(ctx context.Context) ([]spot.Spot, error)
 	GetSpot(ctx context.Context, id string) (spot.Spot, error)
 	UpsertSpot(ctx context.Context, s spot.Spot) error
-	UpsertObservation(ctx context.Context, stationID string, o noaa.MeteorologicalObservation) error
+	UpsertObservation(ctx context.Context, stationID string, o noaa.MeteorologicalObservation) (int64, error)
 	LatestObservation(ctx context.Context, stationID string) (Observation, error)
 	InsertFeedback(ctx context.Context, f Feedback) (int64, error)
 }
@@ -113,7 +113,9 @@ func (s *PgStore) UpsertSpot(ctx context.Context, sp spot.Spot) error {
 	})
 }
 
-func (s *PgStore) UpsertObservation(ctx context.Context, stationID string, o noaa.MeteorologicalObservation) error {
+// UpsertObservation inserts an observation, returning the number of rows
+// inserted (0 if it already existed).
+func (s *PgStore) UpsertObservation(ctx context.Context, stationID string, o noaa.MeteorologicalObservation) (int64, error) {
 	// TODO(#220): noaa.parseValue maps the NDBC "MM" sentinel to 0, so every
 	// reading is stored as present. Make the noaa layer missing-aware so these
 	// nullable columns reflect true absence.

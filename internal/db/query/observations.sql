@@ -1,4 +1,4 @@
--- name: UpsertObservation :exec
+-- name: UpsertObservation :execrows
 INSERT INTO observations (
     station_id, observed_at, wave_height_m, dominant_wave_period_s, average_wave_period_s,
     wave_direction_deg, wind_direction_deg, wind_speed_mps, wind_gust_mps,

@@ -39,7 +39,7 @@ func (q *Queries) LatestObservation(ctx context.Context, stationID string) (Obse
 	return i, err
 }
 
-const upsertObservation = `-- name: UpsertObservation :exec
+const upsertObservation = `-- name: UpsertObservation :execrows
 INSERT INTO observations (
     station_id, observed_at, wave_height_m, dominant_wave_period_s, average_wave_period_s,
     wave_direction_deg, wind_direction_deg, wind_speed_mps, wind_gust_mps,
@@ -65,8 +65,8 @@ type UpsertObservationParams struct {
 	SeaLevelPressureHpa pgtype.Float8
 }
 
-func (q *Queries) UpsertObservation(ctx context.Context, arg UpsertObservationParams) error {
-	_, err := q.db.Exec(ctx, upsertObservation,
+func (q *Queries) UpsertObservation(ctx context.Context, arg UpsertObservationParams) (int64, error) {
+	result, err := q.db.Exec(ctx, upsertObservation,
 		arg.StationID,
 		arg.ObservedAt,
 		arg.WaveHeightM,
@@ -80,5 +80,8 @@ func (q *Queries) UpsertObservation(ctx context.Context, arg UpsertObservationPa
 		arg.WaterTemperatureC,
 		arg.SeaLevelPressureHpa,
 	)
-	return err
+	if err != nil {
+		return 0, err
+	}
+	return result.RowsAffected(), nil
 }

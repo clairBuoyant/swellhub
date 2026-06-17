@@ -78,13 +78,15 @@ func TestObservationsLatest(t *testing.T) {
 	older := noaa.MeteorologicalObservation{Datetime: time.Date(2026, 6, 14, 10, 0, 0, 0, time.UTC), WaveHeight: 1.0}
 	newer := noaa.MeteorologicalObservation{Datetime: time.Date(2026, 6, 14, 11, 0, 0, 0, time.UTC), WaveHeight: 1.4}
 	for _, o := range []noaa.MeteorologicalObservation{older, newer} {
-		if err := st.UpsertObservation(ctx, "TESTBUOY", o); err != nil {
+		if _, err := st.UpsertObservation(ctx, "TESTBUOY", o); err != nil {
 			t.Fatalf("UpsertObservation: %v", err)
 		}
 	}
-	// Re-upsert is idempotent (ON CONFLICT DO NOTHING).
-	if err := st.UpsertObservation(ctx, "TESTBUOY", newer); err != nil {
+	// Re-upsert is idempotent (ON CONFLICT DO NOTHING) -> 0 rows inserted.
+	if n, err := st.UpsertObservation(ctx, "TESTBUOY", newer); err != nil {
 		t.Fatalf("re-UpsertObservation: %v", err)
+	} else if n != 0 {
+		t.Errorf("re-upsert inserted %d rows, want 0", n)
 	}
 
 	got, err := st.LatestObservation(ctx, "TESTBUOY")
