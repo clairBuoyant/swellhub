@@ -30,6 +30,11 @@ tasks:
     cmds:
       - DATABASE_URL="${DATABASE_URL:-{{.DSN}}}" go run ./cmd/migrate up
 
+  ingest:
+    desc: Run the observation ingest once against the local DB
+    cmds:
+      - DATABASE_URL="${DATABASE_URL:-{{.DSN}}}" go run ./cmd/ingest
+
   rollback:
     desc: Roll back the most recent migration
     cmds:
