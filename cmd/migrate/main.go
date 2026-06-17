@@ -1,7 +1,7 @@
 // Command migrate runs database migrations and, on "up", seeds the spot config
 // from the in-repo source of truth (internal/spot). Idempotent; safe to re-run.
 //
-// Usage: DATABASE_URL=postgres://... go run ./cmd/migrate [up|down|status|reset]
+// Usage: DB_URL=postgres://... go run ./cmd/migrate [up|down|status|reset]
 package main
 
 import (
@@ -20,9 +20,9 @@ func main() {
 		command = os.Args[1]
 	}
 
-	dsn := os.Getenv("DATABASE_URL")
+	dsn := os.Getenv("DB_URL")
 	if dsn == "" {
-		log.Fatal("DATABASE_URL is required")
+		log.Fatal("DB_URL is required")
 	}
 
 	if err := db.RunGoose(dsn, command); err != nil {

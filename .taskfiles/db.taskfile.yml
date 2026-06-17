@@ -28,22 +28,22 @@ tasks:
   migrate:
     desc: Apply migrations and seed spots
     cmds:
-      - DATABASE_URL="${DATABASE_URL:-{{.DSN}}}" go run ./cmd/migrate up
+      - DB_URL="${DB_URL:-{{.DSN}}}" go run ./cmd/migrate up
 
   ingest:
     desc: Run the observation ingest once against the local DB
     cmds:
-      - DATABASE_URL="${DATABASE_URL:-{{.DSN}}}" go run ./cmd/ingest
+      - DB_URL="${DB_URL:-{{.DSN}}}" go run ./cmd/ingest
 
   rollback:
     desc: Roll back the most recent migration
     cmds:
-      - DATABASE_URL="${DATABASE_URL:-{{.DSN}}}" go run ./cmd/migrate down
+      - DB_URL="${DB_URL:-{{.DSN}}}" go run ./cmd/migrate down
 
   status:
     desc: Show migration status
     cmds:
-      - DATABASE_URL="${DATABASE_URL:-{{.DSN}}}" go run ./cmd/migrate status
+      - DB_URL="${DB_URL:-{{.DSN}}}" go run ./cmd/migrate status
 
   test:
     desc: Run store integration tests against the local DB

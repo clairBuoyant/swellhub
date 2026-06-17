@@ -2,7 +2,7 @@
 // configured spots and upserts them into Postgres. Intended to run on a
 // schedule (see .github/workflows/ingest.yml).
 //
-// Usage: DATABASE_URL=postgres://... go run ./cmd/ingest
+// Usage: DB_URL=postgres://... go run ./cmd/ingest
 package main
 
 import (
@@ -20,9 +20,9 @@ import (
 func main() {
 	logger := log.InitLoggerJSON()
 
-	dsn := os.Getenv("DATABASE_URL")
+	dsn := os.Getenv("DB_URL")
 	if dsn == "" {
-		logger.Error("DATABASE_URL is required")
+		logger.Error("DB_URL is required")
 		os.Exit(1)
 	}
 
