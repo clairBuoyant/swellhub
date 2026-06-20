@@ -1,0 +1,6 @@
+# Agent-facing instruction and context docs are authored and maintained by AI
+# tooling for AI consumers. Human-readability rules (notably MD013 line length)
+# don't apply, so keep these out of the Markdown linter.
+AGENTS.md
+CONTEXT.md
+docs/agents/
