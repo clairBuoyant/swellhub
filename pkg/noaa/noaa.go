@@ -53,17 +53,26 @@ func request(url string) ([]byte, int, error) {
 	return body, response.StatusCode, nil
 }
 
-func parseValue(value string) (float32, error) {
+func parseValue(value string) (*float32, error) {
 	if value == "MM" {
-		return 0, nil
+		return nil, nil
 	}
 
 	parsedValue, err := strconv.ParseFloat(value, 32)
 	if err != nil {
-		return 0, err
+		return nil, err
 	}
 
-	return float32(parsedValue), nil
+	v := float32(parsedValue)
+	return &v, nil
+}
+
+func direction(value *float32) *int16 {
+	if value == nil {
+		return nil
+	}
+	v := int16(*value)
+	return &v
 }
 
 func parseRecordToStruct(record []string, mo *MeteorologicalObservation) error {
@@ -82,7 +91,7 @@ func parseRecordToStruct(record []string, mo *MeteorologicalObservation) error {
 	mo.Datetime = time.Date(int(year), time.Month(month), int(day), int(hour), int(minute), 0, 0, time.UTC)
 
 	if value, err := parseValue(rowValues[5]); err == nil {
-		mo.WindDirection = int16(value)
+		mo.WindDirection = direction(value)
 	} else {
 		return err
 	}
@@ -118,7 +127,7 @@ func parseRecordToStruct(record []string, mo *MeteorologicalObservation) error {
 	}
 
 	if value, err := parseValue(rowValues[11]); err == nil {
-		mo.WaveDirection = int16(value)
+		mo.WaveDirection = direction(value)
 	} else {
 		return err
 	}

@@ -55,7 +55,7 @@ type Store interface {
 	ListSpots(ctx context.Context) ([]spot.Spot, error)
 	GetSpot(ctx context.Context, id string) (spot.Spot, error)
 	UpsertSpot(ctx context.Context, s spot.Spot) error
-	UpsertObservation(ctx context.Context, stationID string, o noaa.MeteorologicalObservation) error
+	UpsertObservation(ctx context.Context, stationID string, o noaa.MeteorologicalObservation) (int64, error)
 	LatestObservation(ctx context.Context, stationID string) (Observation, error)
 	InsertFeedback(ctx context.Context, f Feedback) (int64, error)
 }
@@ -113,10 +113,9 @@ func (s *PgStore) UpsertSpot(ctx context.Context, sp spot.Spot) error {
 	})
 }
 
-func (s *PgStore) UpsertObservation(ctx context.Context, stationID string, o noaa.MeteorologicalObservation) error {
-	// TODO(#220): noaa.parseValue maps the NDBC "MM" sentinel to 0, so every
-	// reading is stored as present. Make the noaa layer missing-aware so these
-	// nullable columns reflect true absence.
+// UpsertObservation inserts an observation, returning the number of rows
+// inserted (0 if it already existed).
+func (s *PgStore) UpsertObservation(ctx context.Context, stationID string, o noaa.MeteorologicalObservation) (int64, error) {
 	return s.q.UpsertObservation(ctx, sqlc.UpsertObservationParams{
 		StationID:           stationID,
 		ObservedAt:          ts(o.Datetime),
@@ -196,9 +195,19 @@ func spotFromRow(r sqlc.Spot) spot.Spot {
 
 func ts(t time.Time) pgtype.Timestamptz { return pgtype.Timestamptz{Time: t, Valid: true} }
 
-func f8(v float32) pgtype.Float8 { return pgtype.Float8{Float64: float64(v), Valid: true} }
+func f8(v *float32) pgtype.Float8 {
+	if v == nil {
+		return pgtype.Float8{}
+	}
+	return pgtype.Float8{Float64: float64(*v), Valid: true}
+}
 
-func i4(v int16) pgtype.Int4 { return pgtype.Int4{Int32: int32(v), Valid: true} }
+func i4(v *int16) pgtype.Int4 {
+	if v == nil {
+		return pgtype.Int4{}
+	}
+	return pgtype.Int4{Int32: int32(*v), Valid: true}
+}
 
 func f8p(p *float64) pgtype.Float8 {
 	if p == nil {
