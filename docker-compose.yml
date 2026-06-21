@@ -7,9 +7,9 @@ services:
     image: postgres:17-alpine
     container_name: swellhub-postgres
     environment:
-      POSTGRES_USER: ${POSTGRES_USER:?set POSTGRES_USER in .env (see env.tmpl)}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env (see env.tmpl)}
-      POSTGRES_DB: ${POSTGRES_DB:-swellhub}
+      POSTGRES_USER: ${DB_USERNAME:?set DB_USERNAME in .env (see env.tmpl)}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?set DB_PASSWORD in .env (see env.tmpl)}
+      POSTGRES_DB: ${DB_NAME:-swellhub}
     ports:
       - "5432:5432"
     volumes:

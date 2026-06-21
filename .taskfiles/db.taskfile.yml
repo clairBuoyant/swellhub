@@ -2,7 +2,7 @@
 version: '3'
 
 vars:
-  DSN: 'postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@127.0.0.1:5432/$POSTGRES_DB?sslmode=disable'
+  DSN: 'postgres://$DB_USERNAME:$DB_PASSWORD@127.0.0.1:5432/$DB_NAME?sslmode=disable'
 
 tasks:
   env:
@@ -48,4 +48,4 @@ tasks:
   test:
     desc: Run store integration tests against the local DB
     cmds:
-      - TEST_DATABASE_URL="${TEST_DATABASE_URL:-{{.DSN}}}" go test ./internal/store/... -count=1
+      - TEST_DB_URL="${TEST_DB_URL:-{{.DSN}}}" go test -tags=integration ./internal/store/... -count=1
