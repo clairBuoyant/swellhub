@@ -1,3 +1,5 @@
+//go:build integration
+
 package store_test
 
 import (
@@ -14,14 +16,15 @@ import (
 	"github.com/clairBuoyant/swellhub/pkg/noaa"
 )
 
-// testStore connects to TEST_DATABASE_URL, applies migrations, and returns a
-// Store. Tests are skipped when the env var is unset so unit runs don't need a
-// database.
+// testStore connects to TEST_DB_URL, applies migrations, and returns a Store. These
+// tests are gated by the `integration` build tag, so a plain `go test ./...`
+// never runs them — only `task db:test` / CI (with -tags=integration) do, which
+// point TEST_DB_URL at a throwaway database. Skipped if it is unset.
 func testStore(t *testing.T) (*store.PgStore, *pgxpool.Pool) {
 	t.Helper()
-	dsn := os.Getenv("TEST_DATABASE_URL")
+	dsn := os.Getenv("TEST_DB_URL")
 	if dsn == "" {
-		t.Skip("TEST_DATABASE_URL not set; skipping store integration tests")
+		t.Skip("TEST_DB_URL not set; skipping store integration tests")
 	}
 	if err := db.Migrate(dsn); err != nil {
 		t.Fatalf("migrate: %v", err)

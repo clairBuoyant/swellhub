@@ -14,26 +14,27 @@ permissions:
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    environment: test
     services:
       postgres:
         image: postgres:17-alpine
         env:
-          POSTGRES_USER: swellhub
-          POSTGRES_PASSWORD: swellhub
-          POSTGRES_DB: swellhub
+          POSTGRES_USER: ${{ secrets.DB_USERNAME }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.DB_NAME }}
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U swellhub -d swellhub"
+          --health-cmd "pg_isready"
           --health-interval 5s
           --health-timeout 3s
           --health-retries 10
 
     env:
-      # Integration tests (e.g. internal/store) self-migrate against this and
-      # run; packages that don't use it are unaffected. Suites skip it when unset.
-      TEST_DATABASE_URL: postgres://swellhub:swellhub@127.0.0.1:5432/swellhub?sslmode=disable
+      # Integration tests (//go:build integration, e.g. internal/store) connect to
+      # TEST_DB_URL and self-migrate; they run with the integration tag below.
+      # Secret names match the infrastructure-neutral contract in env.tmpl.
+      TEST_DB_URL: postgres://${{ secrets.DB_USERNAME }}:${{ secrets.DB_PASSWORD }}@127.0.0.1:5432/${{ secrets.DB_NAME }}?sslmode=disable
 
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
@@ -50,4 +51,4 @@ jobs:
       - name: Vet
         run: go vet ./...
       - name: Test
-        run: go test ./... -count=1
+        run: go test -tags=integration ./... -count=1
