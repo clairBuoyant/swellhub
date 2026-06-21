@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strconv"
 
 	"github.com/clairBuoyant/swellhub/pkg/noaa"
 )
@@ -33,7 +34,7 @@ func main() {
 			os.Exit(1)
 		}
 		for _, mo := range mos {
-			fmt.Printf("Observation Date: %s, Average Wave Period: %f, Wave Height: %f\n", mo.Datetime, mo.AverageWavePeriod, mo.WaveHeight)
+			fmt.Printf("Observation Date: %s, Average Wave Period: %s, Wave Height: %s\n", mo.Datetime, reading(mo.AverageWavePeriod), reading(mo.WaveHeight))
 		}
 
 	case "active":
@@ -52,6 +53,13 @@ func main() {
 		fmt.Println("Error: invalid mode. Use 'realtime' or 'active'")
 		printUsageAndExit()
 	}
+}
+
+func reading(v *float32) string {
+	if v == nil {
+		return "MM"
+	}
+	return strconv.FormatFloat(float64(*v), 'f', -1, 32)
 }
 
 func printUsageAndExit() {

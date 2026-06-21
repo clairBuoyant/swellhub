@@ -94,9 +94,6 @@ func toProtoSpot(sp spot.Spot) *spotv1.Spot {
 }
 
 func toProtoConditions(buoyID string, o noaa.MeteorologicalObservation) *spotv1.Conditions {
-	// TODO(@kylejb): noaa.parseValue maps the NDBC "MM" sentinel to 0, so we
-	// can't yet distinguish missing from a real zero. Until that layer is made
-	// missing-aware, every field is reported as present.
 	return &spotv1.Conditions{
 		BuoyId:              buoyID,
 		ObservedAt:          timestamppb.New(o.Datetime),
@@ -113,5 +110,18 @@ func toProtoConditions(buoyID string, o noaa.MeteorologicalObservation) *spotv1.
 	}
 }
 
-func f64p(v float32) *float64 { f := float64(v); return &f }
-func i32p(v int16) *int32     { i := int32(v); return &i }
+func f64p(v *float32) *float64 {
+	if v == nil {
+		return nil
+	}
+	f := float64(*v)
+	return &f
+}
+
+func i32p(v *int16) *int32 {
+	if v == nil {
+		return nil
+	}
+	i := int32(*v)
+	return &i
+}

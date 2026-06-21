@@ -35,7 +35,12 @@ func main() {
 	defer pool.Close()
 
 	stations := mappedStations()
-	n := ingest.Run(ctx, store.New(pool), noaa.Realtime, stations, logger)
+	n, err := ingest.Run(ctx, store.New(pool), noaa.Realtime, stations, logger)
+	if err != nil {
+		logger.Error("ingest completed with failures", "stations", len(stations), "observations_inserted", n, "error", err)
+		pool.Close()
+		os.Exit(1)
+	}
 	logger.Info("ingest complete", "stations", len(stations), "observations_inserted", n)
 }
 

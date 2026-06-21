@@ -37,15 +37,16 @@ func TestRun(t *testing.T) {
 			return two, nil
 		case "EMPTY":
 			return nil, nil
-		case "ERR":
-			return nil, errors.New("ndbc down")
 		}
 		return nil, nil
 	}
 
 	st := &fakeStore{}
-	// GOOD -> 2 upserts, EMPTY -> 0, ERR -> fetch error (skipped).
-	n := Run(context.Background(), st, fetch, []string{"GOOD", "EMPTY", "ERR"}, discardLogger())
+	// GOOD -> 2 upserts, EMPTY -> 0.
+	n, err := Run(context.Background(), st, fetch, []string{"GOOD", "EMPTY"}, discardLogger())
+	if err != nil {
+		t.Fatalf("Run: %v", err)
+	}
 	if n != 2 {
 		t.Errorf("upserted = %d, want 2", n)
 	}
@@ -61,8 +62,29 @@ func TestRunContinuesPastUpsertError(t *testing.T) {
 	}
 	st := &fakeStore{failOn: "BAD"}
 	// BAD upsert fails (logged, skipped); OK succeeds.
-	n := Run(context.Background(), st, fetch, []string{"BAD", "OK"}, discardLogger())
+	n, err := Run(context.Background(), st, fetch, []string{"BAD", "OK"}, discardLogger())
 	if n != 1 {
 		t.Errorf("upserted = %d, want 1", n)
+	}
+	if err == nil {
+		t.Fatal("Run error = nil, want partial-failure error")
+	}
+}
+
+func TestRunReportsFetchErrorAfterContinuing(t *testing.T) {
+	fetchErr := errors.New("ndbc down")
+	fetch := func(id string, _ noaa.RealtimeDataset) ([]noaa.MeteorologicalObservation, error) {
+		if id == "BAD" {
+			return nil, fetchErr
+		}
+		return []noaa.MeteorologicalObservation{{Datetime: time.Now()}}, nil
+	}
+
+	n, err := Run(context.Background(), &fakeStore{}, fetch, []string{"BAD", "OK"}, discardLogger())
+	if n != 1 {
+		t.Errorf("inserted = %d, want 1", n)
+	}
+	if !errors.Is(err, fetchErr) {
+		t.Fatalf("Run error = %v, want wrapped fetch error", err)
 	}
 }

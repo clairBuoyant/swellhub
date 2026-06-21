@@ -54,20 +54,20 @@ func (d RealtimeDataset) IsValid() bool {
 
 type MeteorologicalObservation struct {
 	Datetime            time.Time `json:"datetime"`
-	WindDirection       int16     `json:"windDirection"`
-	WindSpeed           float32   `json:"windSpeed"`
-	WindGust            float32   `json:"windGust"`
-	WaveHeight          float32   `json:"waveHeight"`
-	DominantWavePeriod  float32   `json:"dominantWavePeriod"`
-	AverageWavePeriod   float32   `json:"averageWavePeriod"`
-	WaveDirection       int16     `json:"waveDirection"`
-	SeaLevelPressure    float32   `json:"seaLevelPressure"`
-	PressureTendency    float32   `json:"pressureTendency"`
-	AirTemperature      float32   `json:"airTemperature"`
-	WaterTemperature    float32   `json:"waterTemperature"`
-	DewpointTemperature float32   `json:"dewpointTemperature"`
-	Visibility          float32   `json:"visibility"`
-	Tide                float32   `json:"tide"`
+	WindDirection       *int16    `json:"windDirection"`
+	WindSpeed           *float32  `json:"windSpeed"`
+	WindGust            *float32  `json:"windGust"`
+	WaveHeight          *float32  `json:"waveHeight"`
+	DominantWavePeriod  *float32  `json:"dominantWavePeriod"`
+	AverageWavePeriod   *float32  `json:"averageWavePeriod"`
+	WaveDirection       *int16    `json:"waveDirection"`
+	SeaLevelPressure    *float32  `json:"seaLevelPressure"`
+	PressureTendency    *float32  `json:"pressureTendency"`
+	AirTemperature      *float32  `json:"airTemperature"`
+	WaterTemperature    *float32  `json:"waterTemperature"`
+	DewpointTemperature *float32  `json:"dewpointTemperature"`
+	Visibility          *float32  `json:"visibility"`
+	Tide                *float32  `json:"tide"`
 }
 
 type WaveSummaryObservation struct {
@@ -87,21 +87,21 @@ type WaveSummaryObservation struct {
 // Encodes time.Time object to ISODateString
 func (o MeteorologicalObservation) MarshalJSON() ([]byte, error) {
 	metObs := struct {
-		Datetime            string  `json:"datetime"`
-		WindDirection       int16   `json:"windDirection"`
-		WindSpeed           float32 `json:"windSpeed"`
-		WindGust            float32 `json:"windGust"`
-		WaveHeight          float32 `json:"waveHeight"`
-		DominantWavePeriod  float32 `json:"dominantWavePeriod"`
-		AverageWavePeriod   float32 `json:"averageWavePeriod"`
-		WaveDirection       int16   `json:"waveDirection"`
-		SeaLevelPressure    float32 `json:"seaLevelPressure"`
-		PressureTendency    float32 `json:"pressureTendency"`
-		AirTemperature      float32 `json:"airTemperature"`
-		WaterTemperature    float32 `json:"waterTemperature"`
-		DewpointTemperature float32 `json:"dewpointTemperature"`
-		Visibility          float32 `json:"visibility"`
-		Tide                float32 `json:"tide"`
+		Datetime            string   `json:"datetime"`
+		WindDirection       *int16   `json:"windDirection"`
+		WindSpeed           *float32 `json:"windSpeed"`
+		WindGust            *float32 `json:"windGust"`
+		WaveHeight          *float32 `json:"waveHeight"`
+		DominantWavePeriod  *float32 `json:"dominantWavePeriod"`
+		AverageWavePeriod   *float32 `json:"averageWavePeriod"`
+		WaveDirection       *int16   `json:"waveDirection"`
+		SeaLevelPressure    *float32 `json:"seaLevelPressure"`
+		PressureTendency    *float32 `json:"pressureTendency"`
+		AirTemperature      *float32 `json:"airTemperature"`
+		WaterTemperature    *float32 `json:"waterTemperature"`
+		DewpointTemperature *float32 `json:"dewpointTemperature"`
+		Visibility          *float32 `json:"visibility"`
+		Tide                *float32 `json:"tide"`
 	}{
 		Datetime:            o.Datetime.Format((time.RFC3339)),
 		WindDirection:       o.WindDirection,

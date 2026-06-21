@@ -75,8 +75,8 @@ func TestObservationsLatest(t *testing.T) {
 	st, _ := testStore(t)
 	ctx := context.Background()
 
-	older := noaa.MeteorologicalObservation{Datetime: time.Date(2026, 6, 14, 10, 0, 0, 0, time.UTC), WaveHeight: 1.0}
-	newer := noaa.MeteorologicalObservation{Datetime: time.Date(2026, 6, 14, 11, 0, 0, 0, time.UTC), WaveHeight: 1.4}
+	older := noaa.MeteorologicalObservation{Datetime: time.Date(2026, 6, 14, 10, 0, 0, 0, time.UTC), WaveHeight: float32Ptr(1.0)}
+	newer := noaa.MeteorologicalObservation{Datetime: time.Date(2026, 6, 14, 11, 0, 0, 0, time.UTC), WaveHeight: float32Ptr(1.4)}
 	for _, o := range []noaa.MeteorologicalObservation{older, newer} {
 		if _, err := st.UpsertObservation(ctx, "TESTBUOY", o); err != nil {
 			t.Fatalf("UpsertObservation: %v", err)
@@ -103,11 +103,16 @@ func TestObservationsLatest(t *testing.T) {
 	if float32(*got.WaveHeightM) != 1.4 {
 		t.Errorf("latest wave height = %v, want 1.4", *got.WaveHeightM)
 	}
+	if got.WindSpeedMps != nil {
+		t.Errorf("latest missing wind speed = %v, want nil", *got.WindSpeedMps)
+	}
 
 	if _, err := st.LatestObservation(ctx, "NOBUOY"); err != store.ErrNotFound {
 		t.Errorf("LatestObservation(NOBUOY) err = %v, want ErrNotFound", err)
 	}
 }
+
+func float32Ptr(v float32) *float32 { return &v }
 
 func TestInsertFeedback(t *testing.T) {
 	st, _ := testStore(t)

@@ -62,8 +62,8 @@ func TestGetSpotNotFound(t *testing.T) {
 func TestGetSpotConditions(t *testing.T) {
 	obs := noaa.MeteorologicalObservation{
 		Datetime:   time.Date(2026, 6, 14, 12, 0, 0, 0, time.UTC),
-		WaveHeight: 1.5,
-		WindSpeed:  4.0,
+		WaveHeight: float32Ptr(1.5),
+		WindSpeed:  float32Ptr(4.0),
 	}
 
 	// rockaway-90th maps buoys ["44065", "44025"].
@@ -130,6 +130,11 @@ func TestGetSpotConditions(t *testing.T) {
 			if conds.GetWaveHeightM() != 1.5 {
 				t.Errorf("wave height = %v, want 1.5", conds.GetWaveHeightM())
 			}
+			if conds.WindGustMps != nil {
+				t.Errorf("missing wind gust = %v, want absent", conds.GetWindGustMps())
+			}
 		})
 	}
 }
+
+func float32Ptr(v float32) *float32 { return &v }
