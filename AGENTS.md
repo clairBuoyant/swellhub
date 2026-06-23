@@ -4,6 +4,10 @@ Agent instructions for `clairBuoyant/swellhub`. Add project-specific guidance ab
 the section below; the `## Agent skills` block is managed by the
 `setup-matt-pocock-skills` skill and points at the per-topic docs under `docs/agents/`.
 
+## CI conventions
+
+- **GitHub token format:** the Actions `GITHUB_TOKEN` is rolling out as a longer (~520-char), `ghs_`-prefixed JWT ([2026-05-15 changelog](https://github.blog/changelog/2026-05-15-github-app-installation-tokens-per-request-override-header/)). We pass it opaquely, so there's nothing to change today — but never assume a token's length or shape in new CI tooling, regexes, or token-storing DB columns (allow ≥520 chars and the dotted `ghs_…` form). No deprecation date announced yet.
+
 ## Agent skills
 
 ### Issue tracker
