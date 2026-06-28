@@ -2,7 +2,7 @@ name: ingest
 
 on:
   schedule:
-    - cron: '0 * * * *' # hourly, on the hour (UTC)
+    - cron: '0 9 * * *'
   workflow_dispatch: {}
 
 permissions:
@@ -17,7 +17,7 @@ jobs:
   ingest:
     runs-on: ubuntu-latest
     environment: preprod
-    timeout-minutes: 15
+    timeout-minutes: 30
     env:
       DB_URL: ${{ secrets.DB_URL }}
     steps:
