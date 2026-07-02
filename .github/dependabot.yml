@@ -6,6 +6,8 @@ updates:
       interval: 'weekly'
       day: 'sunday'
       time: '17:00'
+    cooldown:
+      default-days: 7
     groups:
       all-actions:
         patterns: ['*']
@@ -15,12 +17,16 @@ updates:
       interval: 'weekly'
       day: 'sunday'
       time: '17:00'
+    cooldown:
+      default-days: 7
   - package-ecosystem: 'npm'
     directory: '/web'
     schedule:
       interval: 'weekly'
       day: 'sunday'
       time: '17:00'
+    cooldown:
+      default-days: 7
     groups:
       dev-dependencies:
         dependency-type: 'development'
