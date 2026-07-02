@@ -18,7 +18,7 @@ type Upserter interface {
 }
 
 // RealtimeFunc fetches realtime observations for a station (noaa.Realtime).
-type RealtimeFunc func(stationID string, dataset noaa.RealtimeDataset) ([]noaa.MeteorologicalObservation, error)
+type RealtimeFunc func(ctx context.Context, stationID string, dataset noaa.RealtimeDataset) ([]noaa.MeteorologicalObservation, error)
 
 // Run fetches realtime observations for each station and upserts every returned
 // row (idempotent on station+datetime). It is best-effort: an error for one
@@ -29,7 +29,7 @@ func Run(ctx context.Context, store Upserter, fetch RealtimeFunc, stationIDs []s
 	var inserted int
 	var failures []error
 	for _, id := range stationIDs {
-		obs, err := fetch(id, noaa.TXT)
+		obs, err := fetch(ctx, id, noaa.TXT)
 		if err != nil {
 			logger.Warn("buoy fetch failed", "buoy", id, "error", err)
 			failures = append(failures, fmt.Errorf("fetch buoy %s: %w", id, err))

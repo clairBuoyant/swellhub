@@ -22,7 +22,7 @@ func testService(fn realtimeFunc) *spotService {
 }
 
 func TestListSpots(t *testing.T) {
-	svc := testService(func(string, noaa.RealtimeDataset) ([]noaa.MeteorologicalObservation, error) {
+	svc := testService(func(context.Context, string, noaa.RealtimeDataset) ([]noaa.MeteorologicalObservation, error) {
 		return nil, nil
 	})
 
@@ -46,7 +46,7 @@ func TestListSpots(t *testing.T) {
 }
 
 func TestGetSpotNotFound(t *testing.T) {
-	svc := testService(func(string, noaa.RealtimeDataset) ([]noaa.MeteorologicalObservation, error) {
+	svc := testService(func(context.Context, string, noaa.RealtimeDataset) ([]noaa.MeteorologicalObservation, error) {
 		return nil, nil
 	})
 
@@ -75,7 +75,7 @@ func TestGetSpotConditions(t *testing.T) {
 	}{
 		{
 			name: "primary buoy returns data",
-			fn: func(id string, _ noaa.RealtimeDataset) ([]noaa.MeteorologicalObservation, error) {
+			fn: func(_ context.Context, id string, _ noaa.RealtimeDataset) ([]noaa.MeteorologicalObservation, error) {
 				if id == "44065" {
 					return []noaa.MeteorologicalObservation{obs}, nil
 				}
@@ -85,7 +85,7 @@ func TestGetSpotConditions(t *testing.T) {
 		},
 		{
 			name: "falls back to next buoy when primary errors",
-			fn: func(id string, _ noaa.RealtimeDataset) ([]noaa.MeteorologicalObservation, error) {
+			fn: func(_ context.Context, id string, _ noaa.RealtimeDataset) ([]noaa.MeteorologicalObservation, error) {
 				switch id {
 				case "44065":
 					return nil, errors.New("ndbc unavailable")
@@ -98,7 +98,7 @@ func TestGetSpotConditions(t *testing.T) {
 		},
 		{
 			name: "no usable data from any buoy",
-			fn: func(string, noaa.RealtimeDataset) ([]noaa.MeteorologicalObservation, error) {
+			fn: func(context.Context, string, noaa.RealtimeDataset) ([]noaa.MeteorologicalObservation, error) {
 				return nil, nil
 			},
 			wantNil: true,

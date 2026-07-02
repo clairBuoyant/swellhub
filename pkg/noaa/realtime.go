@@ -1,6 +1,7 @@
 package noaa
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"time"
@@ -128,13 +129,13 @@ func (o MeteorologicalObservation) MarshalJSON() ([]byte, error) {
 // 	)
 // }
 
-func Realtime(stationId string, dataset RealtimeDataset) ([]MeteorologicalObservation, error) {
+func Realtime(ctx context.Context, stationId string, dataset RealtimeDataset) ([]MeteorologicalObservation, error) {
 	if valid := dataset.IsValid(); !valid {
 		return nil, fmt.Errorf("unknown dataset '%s'", dataset)
 	}
 	url := fmt.Sprintf("%s/%s.%s", RealtimeURL, stationId, dataset)
 
-	data, err := realtimeMeteorological(url)
+	data, err := realtimeMeteorological(ctx, url)
 	if err != nil {
 		return nil, err
 	}

@@ -41,7 +41,7 @@ func Buoy(app application) http.HandlerFunc {
 		}
 
 		// TODO(@kylejb): add validation for stationID too
-		data, err := noaa.Realtime(r.PathValue("stationID"), dataset)
+		data, err := noaa.Realtime(r.Context(), r.PathValue("stationID"), dataset)
 		if err != nil {
 			// TODO(@kylejb): dynamically provide http status code
 			app.ServerError(w, r, errors.NewAppError(http.StatusNotAcceptable, "failed to encode response", err), http.StatusNotAcceptable)
@@ -55,7 +55,7 @@ func Buoy(app application) http.HandlerFunc {
 
 func Buoys(app application) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		data, err := noaa.ActiveStations()
+		data, err := noaa.ActiveStations(r.Context())
 		if err != nil {
 			app.ServerError(w, r, errors.NewAppError(http.StatusBadRequest, "failed to retrieve active stations from NDBC", err), http.StatusBadRequest)
 			return

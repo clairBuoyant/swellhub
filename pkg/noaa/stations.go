@@ -1,6 +1,7 @@
 package noaa
 
 import (
+	"context"
 	"encoding/xml"
 	"fmt"
 )
@@ -29,10 +30,10 @@ type Station struct {
 // TAO stations are excluded. Each station has an indicator showing
 // whether the elevation, meteorological data, single point or profile
 // currents data, water quality data, or DART data are available.
-func ActiveStations() (*Stations, error) {
+func ActiveStations(ctx context.Context) (*Stations, error) {
 	url := fmt.Sprintf("%s.%s", ActiveStationsURL, "xml")
 
-	response, code, err := request(url)
+	response, code, err := request(ctx, url)
 	if err != nil {
 		return nil, NewRequestError(code, "NDBC request error", err)
 	}

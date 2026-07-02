@@ -1,6 +1,7 @@
 package noaa
 
 import (
+	"context"
 	"encoding/csv"
 	"io"
 	"log/slog"
@@ -10,6 +11,11 @@ import (
 	"strings"
 	"time"
 )
+
+// httpClient bounds every NDBC/NOAA request. Realtime files are small, so a
+// healthy fetch completes in seconds; the Timeout keeps a stalled upstream
+// from hanging a run when the caller's context has no deadline.
+var httpClient = &http.Client{Timeout: 60 * time.Second}
 
 func extractHeaders(r *csv.Reader) ([]string, []string, error) {
 	var headers []string
@@ -33,8 +39,12 @@ func extractHeaders(r *csv.Reader) ([]string, []string, error) {
 	return headers, units, nil
 }
 
-func request(url string) ([]byte, int, error) {
-	response, err := http.Get(url)
+func request(ctx context.Context, url string) ([]byte, int, error) {
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
+	if err != nil {
+		return nil, 0, err
+	}
+	response, err := httpClient.Do(req)
 	if err != nil {
 		return nil, 0, err
 	}
@@ -177,8 +187,8 @@ func parseRecordToStruct(record []string, mo *MeteorologicalObservation) error {
 	return nil
 }
 
-func realtimeMeteorological(url string) ([]MeteorologicalObservation, error) {
-	body, statusCode, err := request(url)
+func realtimeMeteorological(ctx context.Context, url string) ([]MeteorologicalObservation, error) {
+	body, statusCode, err := request(ctx, url)
 	if err != nil {
 		return nil, NewRequestError(statusCode, err.Error(), err)
 	}

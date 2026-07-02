@@ -1,6 +1,31 @@
 package noaa
 
-import "testing"
+import (
+	"context"
+	"net/http"
+	"net/http/httptest"
+	"testing"
+	"time"
+)
+
+func TestRequestFailsFastWhenServerHangs(t *testing.T) {
+	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		<-r.Context().Done() // never respond; unblocks when the client gives up
+	}))
+	defer srv.Close()
+
+	ctx, cancel := context.WithTimeout(context.Background(), 100*time.Millisecond)
+	defer cancel()
+
+	start := time.Now()
+	_, _, err := request(ctx, srv.URL)
+	if err == nil {
+		t.Fatal("request against hanging server = nil error, want context deadline error")
+	}
+	if elapsed := time.Since(start); elapsed > 2*time.Second {
+		t.Fatalf("request took %v to fail, want prompt cancellation", elapsed)
+	}
+}
 
 func TestParseValuePreservesMissingAndZero(t *testing.T) {
 	missing, err := parseValue("MM")
