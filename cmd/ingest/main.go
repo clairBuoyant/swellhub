@@ -8,6 +8,7 @@ package main
 import (
 	"context"
 	"os"
+	"time"
 
 	"github.com/clairBuoyant/swellhub/internal/db"
 	"github.com/clairBuoyant/swellhub/internal/ingest"
@@ -26,7 +27,10 @@ func main() {
 		os.Exit(1)
 	}
 
-	ctx := context.Background()
+	// In-process backstop under the workflow's timeout-minutes cap; per-request
+	// bounds live in pkg/noaa's http.Client.
+	ctx, cancel := context.WithTimeout(context.Background(), 25*time.Minute)
+	defer cancel()
 	pool, err := db.NewPool(ctx, dsn)
 	if err != nil {
 		logger.Error("connect postgres", "error", err)

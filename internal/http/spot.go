@@ -15,7 +15,7 @@ import (
 
 // realtimeFunc fetches realtime observations for a station. Injected so tests
 // can stub NDBC.
-type realtimeFunc func(stationID string, dataset noaa.RealtimeDataset) ([]noaa.MeteorologicalObservation, error)
+type realtimeFunc func(ctx context.Context, stationID string, dataset noaa.RealtimeDataset) ([]noaa.MeteorologicalObservation, error)
 
 // spotService implements the Connect SpotService (spotv1connect.SpotServiceHandler):
 // it serves configured spots, each joined with the latest conditions from its
@@ -46,7 +46,7 @@ func (s *spotService) ListSpots(
 // GetSpot returns a spot joined with the latest conditions from its primary
 // reachable buoy. Unknown id yields CodeNotFound.
 func (s *spotService) GetSpot(
-	_ context.Context,
+	ctx context.Context,
 	req *connect.Request[spotv1.GetSpotRequest],
 ) (*connect.Response[spotv1.GetSpotResponse], error) {
 	sp, ok := spot.ByID(req.Msg.GetId())
@@ -57,16 +57,16 @@ func (s *spotService) GetSpot(
 	return connect.NewResponse(&spotv1.GetSpotResponse{
 		SpotConditions: &spotv1.SpotConditions{
 			Spot:       toProtoSpot(sp),
-			Conditions: s.latestConditions(sp),
+			Conditions: s.latestConditions(ctx, sp),
 		},
 	}), nil
 }
 
 // latestConditions returns the most recent observation from the first mapped
 // buoy that responds with data, or nil if none do.
-func (s *spotService) latestConditions(sp spot.Spot) *spotv1.Conditions {
+func (s *spotService) latestConditions(ctx context.Context, sp spot.Spot) *spotv1.Conditions {
 	for _, buoyID := range sp.BuoyIDs {
-		obs, err := s.realtime(buoyID, noaa.TXT)
+		obs, err := s.realtime(ctx, buoyID, noaa.TXT)
 		if err != nil {
 			s.logger.Warn("buoy fetch failed", "spot", sp.ID, "buoy", buoyID, "error", err)
 			continue

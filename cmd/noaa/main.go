@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"flag"
 	"fmt"
 	"os"
@@ -28,7 +29,7 @@ func main() {
 			printUsageAndExit()
 		}
 
-		mos, err := noaa.Realtime(*stationID, noaa.TXT)
+		mos, err := noaa.Realtime(context.Background(), *stationID, noaa.TXT)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error running Realtime: %v\n", err)
 			os.Exit(1)
@@ -40,7 +41,7 @@ func main() {
 	case "active":
 		activeCmd.Parse(os.Args[2:])
 
-		stations, err := noaa.ActiveStations()
+		stations, err := noaa.ActiveStations(context.Background())
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "Error running ActiveStations: %v\n", err)
 			os.Exit(1)

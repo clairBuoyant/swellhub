@@ -31,7 +31,7 @@ func TestRun(t *testing.T) {
 		{Datetime: time.Now()},
 		{Datetime: time.Now().Add(-time.Hour)},
 	}
-	fetch := func(id string, _ noaa.RealtimeDataset) ([]noaa.MeteorologicalObservation, error) {
+	fetch := func(_ context.Context, id string, _ noaa.RealtimeDataset) ([]noaa.MeteorologicalObservation, error) {
 		switch id {
 		case "GOOD":
 			return two, nil
@@ -57,7 +57,7 @@ func TestRun(t *testing.T) {
 
 func TestRunContinuesPastUpsertError(t *testing.T) {
 	obs := []noaa.MeteorologicalObservation{{Datetime: time.Now()}}
-	fetch := func(string, noaa.RealtimeDataset) ([]noaa.MeteorologicalObservation, error) {
+	fetch := func(context.Context, string, noaa.RealtimeDataset) ([]noaa.MeteorologicalObservation, error) {
 		return obs, nil
 	}
 	st := &fakeStore{failOn: "BAD"}
@@ -73,7 +73,7 @@ func TestRunContinuesPastUpsertError(t *testing.T) {
 
 func TestRunReportsFetchErrorAfterContinuing(t *testing.T) {
 	fetchErr := errors.New("ndbc down")
-	fetch := func(id string, _ noaa.RealtimeDataset) ([]noaa.MeteorologicalObservation, error) {
+	fetch := func(_ context.Context, id string, _ noaa.RealtimeDataset) ([]noaa.MeteorologicalObservation, error) {
 		if id == "BAD" {
 			return nil, fetchErr
 		}
