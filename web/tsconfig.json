@@ -1,22 +1,21 @@
 {
   "compilerOptions": {
-    "baseUrl": "src",
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "types": ["node", "vite/client"],
     "module": "ESNext",
     "outDir": "dist",
     "paths": {
-      "@components/*": ["components/*"],
-      "@config/*": ["config/*"],
-      "@constants": ["constants/index"],
-      "@features/*": ["features/*"],
-      "@gen/*": ["gen/*"],
-      "@hooks": ["hooks/index"],
-      "@hooks/*": ["hooks/*"],
-      "@layouts/*": ["components/layouts/*"],
-      "@lib/*": ["lib/*"],
-      "@types": ["types/index"],
-      "@utils/*": ["utils/*"]
+      "@components/*": ["./src/components/*"],
+      "@config/*": ["./src/config/*"],
+      "@constants": ["./src/constants/index"],
+      "@features/*": ["./src/features/*"],
+      "@gen/*": ["./src/gen/*"],
+      "@hooks": ["./src/hooks/index"],
+      "@hooks/*": ["./src/hooks/*"],
+      "@layouts/*": ["./src/components/layouts/*"],
+      "@lib/*": ["./src/lib/*"],
+      "@types": ["./src/types/index"],
+      "@utils/*": ["./src/utils/*"]
     },
     "skipLibCheck": true,
     "target": "ESNext",
@@ -38,6 +37,5 @@
     "removeComments": true,
     "strict": true
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src"]
 }

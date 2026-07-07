@@ -1,5 +1,12 @@
 // TODO(@kylejb): rework store for notifications
-import React, { createContext, useContext, useMemo, useReducer, type ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useMemo,
+  useReducer,
+  type Dispatch,
+  type ReactNode,
+} from 'react';
 
 type Notification = {
   id: string;
@@ -38,7 +45,7 @@ function notificationReducer(state: State, action: Action): State {
 
 const NotificationContext = createContext<{
   state: State;
-  dispatch: React.Dispatch<Action>;
+  dispatch: Dispatch<Action>;
 }>({ dispatch: () => null, state: initialState });
 
 export function NotificationProvider({ children }: { children: ReactNode }) {

@@ -3,7 +3,7 @@ import type { BaseBuoy, CamelCaseToSnakeNested, SnakeToCamelCaseNested } from '@
 /**
  * `Buoy` DTO.
  */
-export interface Buoy extends CamelCaseToSnakeNested<BaseBuoy> {}
+export type Buoy = CamelCaseToSnakeNested<BaseBuoy>;
 
 export interface ParsedBuoy extends Omit<SnakeToCamelCaseNested<Buoy>, 'location'> {
   latitude: number;

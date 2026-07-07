@@ -1,5 +1,6 @@
 import js from '@eslint/js';
-import importPlugin from 'eslint-plugin-import';
+import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
+import { importX } from 'eslint-plugin-import-x';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import prettier from 'eslint-plugin-prettier/recommended';
 import react from 'eslint-plugin-react';
@@ -17,7 +18,8 @@ export default defineConfig(
       js.configs.recommended,
       ...tseslint.configs.recommended,
       react.configs.flat.recommended,
-      importPlugin.flatConfigs.recommended,
+      importX.flatConfigs.recommended,
+      importX.flatConfigs.typescript,
       jsxA11y.flatConfigs.recommended,
       prettier,
     ],
@@ -30,13 +32,15 @@ export default defineConfig(
     },
     settings: {
       react: {
-        version: 'detect',
+        // Pinned, not 'detect': eslint-plugin-react's version detection calls
+        // context.getFilename(), which eslint 10 removed. Bump on React majors.
+        version: '19.2',
       },
-      'import/resolver': {
-        typescript: {
+      'import-x/resolver-next': [
+        createTypeScriptImportResolver({
           project: './tsconfig.json',
-        },
-      },
+        }),
+      ],
     },
     rules: {
       'react/button-has-type': 'error',
