@@ -1,13 +1,27 @@
 import { render, screen } from '@testing-library/react';
-import { expect, test } from 'vitest';
+import { expect, test, vi } from 'vitest';
 
 import App from './app';
 
-// TODO(@kylejb): stale since the AppProvider/router restructure — App renders a
-// Spinner until the auth query settles, which never happens in jsdom without a
-// mocked Connect transport. Re-enable once a transport mock exists.
-test.skip("renders 'clairBuoyant' in header", () => {
+// AuthLoader blocks rendering until the authenticated-user query settles. That
+// query goes through the axios api-client, so resolve it with no signed-in
+// user; AuthLoader then renders its children (the router).
+vi.mock('@lib/api-client', () => ({
+  api: {
+    get: vi.fn().mockResolvedValue(null),
+    post: vi.fn().mockResolvedValue(undefined),
+  },
+}));
+
+// Keep Connect RPCs off the network in jsdom: serve them from an in-memory
+// router transport instead (no services registered — calls reject cleanly).
+vi.mock('@lib/connect', async () => {
+  const { createRouterTransport } = await import('@connectrpc/connect');
+  return { transport: createRouterTransport(() => {}) };
+});
+
+test("renders 'clairBuoyant' in header", async () => {
   render(<App />);
-  const linkElement = screen.getByText(/clairBuoyant/i);
-  expect(linkElement).toBeInTheDocument();
+  const heading = await screen.findByText(/clairBuoyant/i);
+  expect(heading).toBeInTheDocument();
 });
