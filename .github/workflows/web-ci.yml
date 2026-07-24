@@ -9,9 +9,14 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: web-ci-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     env:
       # web/.npmrc interpolates this to authenticate against npm.fontawesome.com.
       FA_PACKAGE_TOKEN: ${{ secrets.FA_PACKAGE_TOKEN }}

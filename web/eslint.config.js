@@ -1,3 +1,5 @@
+import { createRequire } from 'node:module';
+
 import js from '@eslint/js';
 import { createTypeScriptImportResolver } from 'eslint-import-resolver-typescript';
 import { importX } from 'eslint-plugin-import-x';
@@ -9,6 +11,8 @@ import reactRefresh from 'eslint-plugin-react-refresh';
 import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
+
+const require = createRequire(import.meta.url);
 
 export default defineConfig(
   { ignores: ['dist', 'node_modules', 'src/gen'] },
@@ -32,13 +36,15 @@ export default defineConfig(
     },
     settings: {
       react: {
-        // Pinned, not 'detect': eslint-plugin-react's version detection calls
-        // context.getFilename(), which eslint 10 removed. Bump on React majors.
-        version: '19.2',
+        // Not 'detect': eslint-plugin-react's version detection calls
+        // context.getFilename(), which eslint 10 removed.
+        version: require('react/package.json').version,
       },
       'import-x/resolver-next': [
         createTypeScriptImportResolver({
-          project: './tsconfig.json',
+          // Anchored to this file so lint resolves the same tsconfig
+          // regardless of cwd (IDE integrations, repo-root invocations).
+          project: new URL('./tsconfig.json', import.meta.url).pathname,
         }),
       ],
     },
