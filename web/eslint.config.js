@@ -52,6 +52,8 @@ export default defineConfig(
       'react/button-has-type': 'error',
       'react/prop-types': ['off'],
       'react/react-in-jsx-scope': ['off'],
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],
     },
   },
