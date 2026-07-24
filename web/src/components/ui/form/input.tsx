@@ -1,4 +1,3 @@
-/* eslint-disable arrow-body-style, react/jsx-props-no-spreading */
 import { forwardRef, type InputHTMLAttributes } from 'react';
 import { type UseFormRegisterReturn } from 'react-hook-form';
 

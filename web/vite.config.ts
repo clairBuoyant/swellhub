@@ -1,7 +1,6 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react-swc';
 import { resolve } from 'path';
-import eslintPlugin from 'vite-plugin-eslint';
 import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
@@ -19,7 +18,7 @@ export default defineConfig({
       '@utils': resolve(__dirname, 'src/utils'),
     },
   },
-  plugins: [react(), tailwindcss(), process.env.BUILD_MODE ? false : eslintPlugin()],
+  plugins: [react(), tailwindcss()],
   preview: {
     port: 3000,
   },

@@ -23,7 +23,7 @@ tasks:
     desc: Install all dependencies
     cmds:
       - npm ci
-      - task: browserslist-update
+      - task: browserslist:update
 
   run:
     desc: Run Web with Vite dev server
