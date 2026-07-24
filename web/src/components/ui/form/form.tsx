@@ -155,21 +155,27 @@ const FormMessage = forwardRef<HTMLParagraphElement, HTMLAttributes<HTMLParagrap
 );
 FormMessage.displayName = 'FormMessage';
 
-type FormProps<TFormValues extends FieldValues, Schema> = {
-  onSubmit: SubmitHandler<TFormValues>;
+type FormProps<Schema extends ZodType<FieldValues, FieldValues>> = {
+  onSubmit: SubmitHandler<z.output<Schema>>;
   schema: Schema;
   className?: string;
-  children: (methods: UseFormReturn<TFormValues>) => ReactNode;
-  options?: UseFormProps<TFormValues>;
+  children: (methods: UseFormReturn<z.input<Schema>, unknown, z.output<Schema>>) => ReactNode;
+  options?: UseFormProps<z.input<Schema>, unknown, z.output<Schema>>;
   id?: string;
 };
 
-function Form<
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  Schema extends ZodType<any, any, any>,
-  TFormValues extends FieldValues = z.infer<Schema>,
->({ onSubmit, children, className, options, id, schema }: FormProps<TFormValues, Schema>) {
-  const form = useForm({ ...options, resolver: zodResolver(schema) });
+function Form<Schema extends ZodType<FieldValues, FieldValues>>({
+  onSubmit,
+  children,
+  className,
+  options,
+  id,
+  schema,
+}: FormProps<Schema>) {
+  const form = useForm<z.input<Schema>, unknown, z.output<Schema>>({
+    ...options,
+    resolver: zodResolver(schema),
+  });
   return (
     <FormProvider {...form}>
       <form className={cn('space-y-6', className)} onSubmit={form.handleSubmit(onSubmit)} id={id}>

@@ -29,7 +29,7 @@ import {
   useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import { type ReactNode, useCallback } from 'react';
+import { type JSX, type ReactNode, useCallback } from 'react';
 
 export interface ReactQueryAuthConfig<User, LoginCredentials, RegisterCredentials> {
   userFn: QueryFunction<User, QueryKey>;
