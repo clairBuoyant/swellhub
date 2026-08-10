@@ -24,7 +24,7 @@
     "clsx": "^2.1.1",
     "dayjs": "^1.11.21",
     "leaflet": "^1.9.4",
-    "nanoid": "^5.1.16",
+    "nanoid": "^6.0.0",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
     "react-hook-form": "^7.84.0",
