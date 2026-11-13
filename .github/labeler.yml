@@ -10,7 +10,6 @@ config:
           - '.editorconfig'
           - '.gitignore'
           - '.github/*'
-          - 'renovate.json'
 dependencies:
   - changed-files:
       - any-glob-to-any-file: ['package.json', 'package-lock.json']

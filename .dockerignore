@@ -15,7 +15,6 @@ docker-compose.yml
 Dockerfile
 docs
 LICENSE
-renovate.json
 tmp
 
 **/node_modules
