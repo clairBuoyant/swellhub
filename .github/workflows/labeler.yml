@@ -9,7 +9,6 @@ permissions:
 
 jobs:
   label:
-    if: github.actor != 'renovate[bot]'
     permissions:
       contents: read
       pull-requests: write
